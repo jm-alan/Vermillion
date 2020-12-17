@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 
 const { environment } = require('./config');
 const { cookie } = require('express-validator');
-const { homeRouter } = require('./routes');
+const { homeRouter, apiRouter } = require('./routes');
 
 const isProduction = environment === 'production';
 
@@ -33,5 +33,6 @@ app.use(
 );
 
 app.use(homeRouter);
+app.use('/api', apiRouter);
 
 module.exports = app;
