@@ -33,7 +33,7 @@ app.use(
   })
 );
 
-app.use(apiRouter);
+app.use('/api', apiRouter);
 
 app.use((_req, _res, next) => {
   const err = new Error('The requested resource couldn\'t be found.');
