@@ -1,30 +1,24 @@
 const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-const csurf = require('csurf');
-const helmet = require('helmet');
-const cookieParser = require('cookie-parser');
 const { ValidationError } = require('sequelize');
 
 const { environment } = require('./config');
 const { cookie } = require('express-validator');
-const Router = require('./routes');
 
 const isProduction = environment === 'production';
 
 const app = express();
 
-app.use(morgan('dev'));
-app.use(cookieParser());
+app.use(require('morgan')('dev'));
+app.use(require('cookie-parser')());
 app.use(express.json());
 if (!isProduction) {
-  app.use(cors());
+  app.use(require('cors')());
 }
-app.use(helmet({
+app.use(require('helmet')({
   contentSecurityPolicy: false
 }));
 app.use(
-  csurf({
+  require('csurf')({
     cookie: {
       secure: isProduction,
       sameSite: isProduction && 'Lax',
@@ -33,7 +27,7 @@ app.use(
   })
 );
 
-app.use(Router);
+app.use(require('./routes'));
 
 app.use((_req, _res, next) => {
   const err = new Error('The requested resource couldn\'t be found.');
@@ -42,6 +36,7 @@ app.use((_req, _res, next) => {
   err.status = 404;
   next(err);
 });
+
 app.use((err, _req, _res, next) => {
   // check if error is a Sequelize error:
   if (err instanceof ValidationError) {
@@ -50,6 +45,7 @@ app.use((err, _req, _res, next) => {
   }
   next(err);
 });
+
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
