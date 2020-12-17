@@ -4,7 +4,7 @@ const asyncHandler = require('express-async-handler');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res) => {
   const { email, password, username } = req.body;
   const user = await User.signup({ email, username, password });
 
