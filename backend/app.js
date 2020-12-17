@@ -8,7 +8,7 @@ const { ValidationError } = require('sequelize');
 
 const { environment } = require('./config');
 const { cookie } = require('express-validator');
-const { homeRouter, apiRouter } = require('./routes');
+const Router = require('./routes');
 
 const isProduction = environment === 'production';
 
@@ -33,7 +33,7 @@ app.use(
   })
 );
 
-app.use('/api', apiRouter);
+app.use(Router);
 
 app.use((_req, _res, next) => {
   const err = new Error('The requested resource couldn\'t be found.');
