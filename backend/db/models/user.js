@@ -49,7 +49,20 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = function (models) {
-    // associations can be defined here
+    const mapFollowers = {
+      through: models.Follow,
+      as: 'Followers',
+      foreignKey: 'follower'
+    };
+    const mapFollowing = {
+      through: models.Follow,
+      as: 'Following',
+      foreignKey: 'following'
+    };
+    const mapHearts = { through: models.Heart };
+    const pinTo = [models.User, models.User, models.Post];
+    [models.Post, models.Heart, models.Follow].forEach(model => User.hasMany(model, { foreignKey: 'userId' }));
+    [mapFollowers, mapFollowing, mapHearts].forEach((map, idx) => User.belongsToMany(pinTo[idx], map));
   };
 
   User.getCurrentUserById = async function (id) {
