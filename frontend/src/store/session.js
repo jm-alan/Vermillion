@@ -9,14 +9,21 @@ const constructSession = (user) => ({ type: LOGIN, user });
 const deconstructSession = () => ({ type: LOGOUT });
 
 export const thunkLogin = (dispatch, { identification, password }) => {
-  csrfetch('/api/session', {
+  const attemptLogin = csrfetch('/api/session', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: { identification, password }
   });
-  dispatch(constructSession());
+  if (attemptLogin) {
+    const { data: { user: { id, username } } } = attemptLogin;
+    dispatch(constructSession());
+  }
+};
+
+export const thunkLogout = (dispatch) => {
+  const attemptLogout = csrfetch('/api/session', { method: 'DELETE' });
 };
 
 const sessionReducer = (state = {}, action) => {

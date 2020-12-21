@@ -16,7 +16,7 @@ const handleValidationErrors = (req, _res, next) => {
 };
 
 const validateLogin = [
-  check('credential')
+  check('identification')
     .exists({ checkFalsy: true })
     .notEmpty()
     .withMessage('Please provide a valid email or username.'),
