@@ -17,7 +17,14 @@ export const thunkLogin = (dispatch, { identification, password }) => {
     body: { identification, password }
   });
   if (attemptLogin) {
-    const { data: { user: { id, username } } } = attemptLogin;
+    const {
+      data: {
+        user: {
+          id,
+          username
+        }
+      }
+    } = attemptLogin;
     dispatch(constructSession());
   }
 };
