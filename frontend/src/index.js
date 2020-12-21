@@ -1,24 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { Provider as ReduxProvider } from 'react-redux';
+
 import './index.css';
 import App from './App';
 import configureStore from './store';
+import csrfetch from './store/csrf';
+import restoreCSRF from './store/restoreCSRF';
 
 const store = configureStore();
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
+  restoreCSRF();
   window.store = store;
+  window.csrfetch = csrfetch;
 }
 
-function Root() {
+function Root () {
   return (
-    <ReduxProvider store={store}>
+    <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </ReduxProvider>
+    </Provider>
   );
 }
 
