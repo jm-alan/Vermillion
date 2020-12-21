@@ -1,5 +1,6 @@
 const express = require('express');
 const { ValidationError } = require('sequelize');
+const path = require('path');
 
 const { environment } = require('./config');
 const { cookie } = require('express-validator');
@@ -8,6 +9,7 @@ const isProduction = environment === 'production';
 
 const app = express();
 
+app.use(express.static(path.resolve('./public')));
 app.use(require('morgan')('dev'));
 app.use(require('cookie-parser')());
 app.use(express.json());
