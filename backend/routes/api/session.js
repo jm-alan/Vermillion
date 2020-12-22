@@ -3,9 +3,11 @@ const asyncHandler = require('express-async-handler');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
+const { validateLogin } = require('../../utils/validation');
 
-router.post('/', require('../../utils/validation').validateLogin, asyncHandler(async (req, res, next) => {
+router.post('/', validateLogin, asyncHandler(async (req, res, next) => {
   const { identification, password } = req.body;
+  console.log('POST received at /api/session');
 
   const user = await User.login({ identification, password });
 

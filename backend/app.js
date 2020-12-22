@@ -1,4 +1,9 @@
 const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const csurf = require('csurf');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const { ValidationError } = require('sequelize');
 const path = require('path');
 
@@ -8,19 +13,17 @@ const { cookie } = require('express-validator');
 const isProduction = environment === 'production';
 
 const app = express();
-
-app.use(express.static(path.resolve('./public')));
-app.use(require('morgan')('dev'));
-app.use(require('cookie-parser')());
+app.use(morgan('dev'));
+app.use(cookieParser());
 app.use(express.json());
 if (!isProduction) {
-  app.use(require('cors')());
+  app.use(cors());
 }
-app.use(require('helmet')({
+app.use(helmet({
   contentSecurityPolicy: false
 }));
 app.use(
-  require('csurf')({
+  csurf({
     cookie: {
       secure: isProduction,
       sameSite: isProduction && 'Lax',
@@ -28,6 +31,8 @@ app.use(
     }
   })
 );
+
+app.use(express.static(path.resolve('./public')));
 
 app.use(require('./routes'));
 
@@ -40,7 +45,6 @@ app.use((_req, _res, next) => {
 });
 
 app.use((err, _req, _res, next) => {
-  // check if error is a Sequelize error:
   if (err instanceof ValidationError) {
     err.errors = err.errors.map((e) => e.message);
     err.title = 'Validation error';
@@ -50,7 +54,6 @@ app.use((err, _req, _res, next) => {
 
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
-  console.error(err);
   res.json({
     title: err.title || 'Server Error',
     message: err.message,

@@ -8,7 +8,8 @@ const csrfetch = async (url, options = {}) => {
     options.headers['Content-Type'] = options.headers['Content-Type'] || 'application/json';
     options.headers['XSRF-Token'] = Cookies.get('XSRF-TOKEN');
   }
-  const res = await window.fetch(url, options);
+
+  const res = await fetch(url, options);
 
   const contentType = res.headers.get('content-type');
 

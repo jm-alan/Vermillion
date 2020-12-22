@@ -9,9 +9,6 @@ const deconstructSession = () => ({ type: USER });
 export const LogIn = ({ identification, password }) => async dispatch => {
   const loginResponse = await csrfetch('/api/session', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
     body: JSON.stringify({ identification, password })
   });
   if (loginResponse) dispatch(constructSession(loginResponse.data.user));
