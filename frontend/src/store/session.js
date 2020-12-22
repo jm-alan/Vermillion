@@ -1,35 +1,33 @@
 import csrfetch from './csrf';
 
-const LOGIN = 'session/LOGIN';
+const USER = 'session/USER';
 
-const LOGOUT = 'session/LOGOUT';
+const constructSession = user => ({ type: USER, user });
 
-const constructSession = (user) => ({ type: LOGIN, user });
+const deconstructSession = () => ({ type: USER });
 
-const deconstructSession = () => ({ type: LOGOUT });
-
-export const thunkLogin = (dispatch, { identification, password }) => {
-  const attemptLogin = csrfetch('/api/session', {
+export const LogIn = ({ identification, password }) => async dispatch => {
+  const loginResponse = await csrfetch('/api/session', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: { identification, password }
+    body: JSON.stringify({ identification, password })
   });
-  if (attemptLogin) {
-    const {
-      data: {
-        user: { id, username }
-      }
-    } = attemptLogin;
-    dispatch(constructSession());
-  }
+  if (loginResponse) dispatch(constructSession(loginResponse.data.user));
+  return loginResponse;
 };
 
-export const thunkLogout = (dispatch) => {
-  const attemptLogout = csrfetch('/api/session', { method: 'DELETE' });
+export const LogOut = () => async dispatch => {
+  const logoutResponse = await csrfetch('/api/session', { method: 'DELETE' });
+  if (logoutResponse) dispatch(deconstructSession());
+  return logoutResponse;
 };
 
-const sessionReducer = (state = {}, action) => {
-
-};
+export default function sessionReducer (
+  state = { user: null },
+  { type, user = null }
+) {
+  if (type === USER) return { ...state, user };
+  else return state;
+}

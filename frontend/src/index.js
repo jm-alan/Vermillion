@@ -8,6 +8,7 @@ import App from './App';
 import configureStore from './store';
 import csrfetch from './store/csrf';
 import restoreCSRF from './store/restoreCSRF';
+import * as userStateActions from './store/session';
 
 const store = configureStore();
 
@@ -15,6 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
   restoreCSRF();
   window.store = store;
   window.csrfetch = csrfetch;
+  window.userStateActions = userStateActions;
 }
 
 function Root () {
