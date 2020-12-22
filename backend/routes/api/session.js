@@ -5,6 +5,11 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 const { validateLogin } = require('../../utils/validation');
 
+router.get('/', restoreUser, ({ user }, res) => {
+  if (user) return res.json({ user: user.toSafeObject() });
+  else return res.json({});
+});
+
 router.post('/', validateLogin, asyncHandler(async (req, res, next) => {
   const { identification, password } = req.body;
   console.log('POST received at /api/session');

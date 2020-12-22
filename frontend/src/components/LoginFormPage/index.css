@@ -1,18 +1,55 @@
-form {
-    position: absolute;
-    top: 32.5%;
-    left: 30%;
+div.errors {
+    position: relative;
+    border: 1px solid black;
+    width: 80%;
+    height: 50%;
+    text-align: center;
     display: flex;
-    flex-direction: column;
-    width: 40%;
-    height: 35%;
-    border: 2px solid black;
+    justify-content: center;
     align-items: center;
-    justify-content: space-evenly;
 }
 
-input {
+ul {
+    align-items: center;
+    justify-items: center;
+    flex-basis: auto;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    list-style-type: none;
+}
+
+div.login {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+    background-color: rgb(179, 37, 37);
+}
+
+form {
+    box-sizing: content-box;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+input, button {
+    font-size: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
     box-sizing: border-box;
     padding: 0px;
-    height: 10%
+    text-align: center;
+    height: 60px;
+    margin: 10px;
+    background-color: white;
+}
+
+input:focus, button:focus {
+    outline: none;
 }

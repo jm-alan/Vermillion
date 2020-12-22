@@ -24,12 +24,14 @@ export default function LoginFormPage () {
   if (user) return <Redirect to='/' />;
 
   return (
-    <div>
-      <ul>
-        {
-        errors.map((err, idx) => <li key={idx}>{err}</li>)
-      }
-      </ul>
+    <div className='login'>
+      <div className='errors' style={{ visibility: errors.length ? 'visible' : 'hidden' }}>
+        <ul style={{ margin: '0px', padding: '0px' }}>
+          {
+          errors.map((err, idx) => <li key={idx}>{err}</li>)
+        }
+        </ul>
+      </div>
       <form
         onSubmit={submit}
       >
