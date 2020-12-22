@@ -1,6 +1,7 @@
 #root {
     height: 100%;
-    width: 100%;
+    width: 100%;    
+    background-color: rgb(82, 94, 105);
 }
 
 html {

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import './index.css';
+import classes from './index.css';
 import { LogIn } from '../../store/session';
 import { Redirect } from 'react-router-dom';
 
@@ -22,35 +22,48 @@ export default function LoginFormPage () {
   };
 
   if (user) return <Redirect to='/' />;
-
-  return (
-    <div className='login'>
-      <div className='errors' style={{ visibility: errors.length ? 'visible' : 'hidden' }}>
-        <ul style={{ margin: '0px', padding: '0px' }}>
-          {
+  else {
+    return (
+      <div className={classes.formContainer}>
+        <div
+          className={classes.errors}
+          style={{
+            visibility: errors.length ? 'visible' : 'hidden',
+            height: errors.length ? '50%' : 0,
+            overflow: 'hidden'
+          }}
+        >
+          <ul style={{ margin: '0px', padding: '0px' }} className={classes.errorList}>
+            {
           errors.map((err, idx) => <li key={idx}>{err}</li>)
         }
-        </ul>
+          </ul>
+        </div>
+        <form
+          onSubmit={submit}
+          className={classes.form}
+        >
+          <input
+            className={classes.input}
+            placeholder='Username or Email'
+            name='username'
+            type='text'
+            value={identification}
+            onChange={({ target: { value } }) => updateIdentification(value)}
+            required
+          />
+          <input
+            className={classes.input}
+            placeholder='Password'
+            name='password'
+            type='password'
+            value={password}
+            onChange={({ target: { value } }) => updatePassword(value)}
+            required
+          />
+          <button className={classes.button} type='submit'>Log In</button>
+        </form>
       </div>
-      <form
-        onSubmit={submit}
-      >
-        <input
-          placeholder='Username or Email'
-          name='username'
-          type='text'
-          value={identification}
-          onChange={({ target: { value } }) => updateIdentification(value)}
-        />
-        <input
-          placeholder='Password'
-          name='password'
-          type='password'
-          value={password}
-          onChange={({ target: { value } }) => updatePassword(value)}
-        />
-        <button type='submit'>Log In</button>
-      </form>
-    </div>
-  );
+    );
+  }
 }

@@ -1,12 +1,27 @@
 div.errors {
+    box-sizing: border-box;
+    transition: height 0.45s;
     position: relative;
     border: 1px solid black;
-    width: 80%;
-    height: 50%;
+    border-radius: 15px;
     text-align: center;
     display: flex;
     justify-content: center;
+    align-items: center;    
+    background-color: rgba(255, 192, 203, 0.76);
+    color: rgb(204, 0, 0);
+    font-size: 20px;
+}
+
+div.form {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
     align-items: center;
+    justify-items: center;
+    overflow-x: hidden;
 }
 
 ul {
@@ -20,36 +35,48 @@ ul {
     list-style-type: none;
 }
 
-div.login {
-    height: 100%;
-    width: 100%;
-    display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-columns: 1fr;
-    align-items: center;
-    justify-items: center;
-    background-color: rgb(179, 37, 37);
-}
-
 form {
     box-sizing: content-box;
     display: flex;
     flex-direction: column;
-    width: 80%;
+}
+
+form, div.errors {
+    width: 100%;
+    max-width: 500px;
 }
 
 input, button {
+    width: 100%;
+    color: white;
     font-size: 20px;
-    border: 2px solid black;
+    border: none;
     border-radius: 10px;
     box-sizing: border-box;
     padding: 0px;
     text-align: center;
     height: 60px;
-    margin: 10px;
-    background-color: white;
+    margin: 10px auto;
+    box-shadow: 3px 3px 3px black;
+    position: relative;
+    background-color: #1B1F23;
+}
+
+input::placeholder {
+    color: rgba(211, 211, 211, 0.5)
 }
 
 input:focus, button:focus {
     outline: none;
+    background-color: rgb(98, 101, 105);
+}
+
+input:focus::placeholder {
+    color: transparent;
+}
+
+button:active {
+    top: 2px;
+    left: 2px;
+    box-shadow: none;
 }
