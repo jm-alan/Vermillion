@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import classes from './index.css';
+import * as classes from './index.css';
 import { LogIn } from '../../store/session';
 import { Redirect } from 'react-router-dom';
 
 export default function LoginFormPage () {
+  console.log(classes);
   const user = useSelector(({ session: { user } }) => user);
   const dispatch = useDispatch();
   const [identification, updateIdentification] = useState('');
