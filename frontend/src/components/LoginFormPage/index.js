@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import * as classes from './index.css';
 import { LogIn } from '../../store/session';
 import { Redirect } from 'react-router-dom';
 
 export default function LoginFormPage () {
-  console.log(classes);
   const user = useSelector(({ session: { user } }) => user);
   const dispatch = useDispatch();
   const [identification, updateIdentification] = useState('');
@@ -25,16 +23,16 @@ export default function LoginFormPage () {
   if (user) return <Redirect to='/' />;
   else {
     return (
-      <div className={classes.Testing}>
+      <div className='FormPage'>
         <div
-          className={classes.errors}
+          className='errors'
           style={{
             visibility: errors.length ? 'visible' : 'hidden',
             height: errors.length ? '50%' : 0,
             overflow: 'hidden'
           }}
         >
-          <ul style={{ margin: '0px', padding: '0px' }} className={classes.errorList}>
+          <ul style={{ margin: '0px', padding: '0px' }} className='errorList'>
             {
           errors.map((err, idx) => <li key={idx}>{err}</li>)
         }
@@ -42,10 +40,10 @@ export default function LoginFormPage () {
         </div>
         <form
           onSubmit={submit}
-          className={classes.form}
+          className='form'
         >
           <input
-            className={classes.input}
+            className='input'
             placeholder='Username or Email'
             name='username'
             type='text'
@@ -54,7 +52,7 @@ export default function LoginFormPage () {
             required
           />
           <input
-            className={classes.input}
+            className='input'
             placeholder='Password'
             name='password'
             type='password'
@@ -62,7 +60,7 @@ export default function LoginFormPage () {
             onChange={({ target: { value } }) => updatePassword(value)}
             required
           />
-          <button className={classes.button} type='submit'>Log In</button>
+          <button className='button' type='submit'>Log In</button>
         </form>
       </div>
     );

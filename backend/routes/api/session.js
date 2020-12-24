@@ -12,7 +12,6 @@ router.get('/', restoreUser, ({ user }, res) => {
 
 router.post('/', validateLogin, asyncHandler(async (req, res, next) => {
   const { identification, password } = req.body;
-  console.log('POST received at /api/session');
 
   const user = await User.login({ identification, password });
 

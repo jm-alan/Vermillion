@@ -1,4 +1,4 @@
-.Testing div.errors {
+.FormPage div.errors {
     box-sizing: border-box;
     transition: height 0.45s;
     position: relative;
@@ -13,7 +13,7 @@
     font-size: 20px;
 }
 
-.Testing div.form {
+.FormPage {
     height: 100%;
     width: 100%;
     display: grid;
@@ -24,7 +24,7 @@
     overflow-x: hidden;
 }
 
-.Testing ul {
+.FormPage ul.errorList {
     align-items: center;
     justify-items: center;
     flex-basis: auto;
@@ -35,18 +35,18 @@
     list-style-type: none;
 }
 
-.Testing form {
+.FormPage form {
     box-sizing: content-box;
     display: flex;
     flex-direction: column;
 }
 
-.Testing form, .Testing div.errors {
+.FormPage form, .FormPage div.errors {
     width: 100%;
     max-width: 500px;
 }
 
-.Testing input, .Testing button {
+.FormPage input, .FormPage button {
     width: 100%;
     color: white;
     font-size: 20px;
@@ -62,23 +62,20 @@
     background-color: #1B1F23;
 }
 
-.Testing input::placeholder {
+.FormPage input::placeholder {
     color: rgba(211, 211, 211, 0.5)
 }
 
-.Testing input:focus, .Testing button:focus {
+.FormPage input:focus, .FormPage button:focus {
+    background-color: rgb(98, 101, 105);
     outline: none;
 }
 
-.Testing input:focus {
-    background-color: rgb(98, 101, 105);
-}
-
-.Testing input:focus::placeholder {
+.FormPage input:focus::placeholder {
     color: transparent;
 }
 
-.Testing button:active {
+.FormPage button:active {
     top: 2px;
     left: 2px;
     box-shadow: none;

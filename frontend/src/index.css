@@ -1,14 +1,3 @@
-#root {
-    height: 100%;
-    width: 100%;    
-    background-color: rgb(82, 94, 105);
-}
-
-html {
-    height: 100%;
-}
-
-body {
-    height: 100%;
-    margin: 0;
-}
+@import 'root.css';
+@import 'form.css';
+@import 'nav.css';

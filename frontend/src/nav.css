@@ -1,0 +1,42 @@
+.navBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.navBar .profile {
+    position: relative;
+    right: 5px;
+}
+
+.profileButtonHolder {
+    font-size: 2em;
+}
+
+.navHolder {
+    width: 100%;
+    max-width: 100px;
+}
+
+.navBar button {
+    left: 2px;
+    position: relative;
+    box-shadow: 2px 2px 2px black;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    height: 100%;
+    box-sizing: border-box;
+    background-color: #1B1F23;
+}
+
+.navHolder button:active {
+    box-shadow: none;
+    top: 2px;
+    left: 4px;
+}
+
+.navHolder button:focus {
+    outline: none;
+}

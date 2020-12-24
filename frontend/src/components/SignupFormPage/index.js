@@ -27,7 +27,7 @@ export default function SignupFormPage () {
   if (user) return <Redirect to='/' />;
   else {
     return (
-      <div className='form'>
+      <div className='FormPage'>
         <div
           className='errors'
           style={{
@@ -36,13 +36,16 @@ export default function SignupFormPage () {
             overflow: 'hidden'
           }}
         >
-          <ul>
+          <ul className='errorList'>
             {
           errors.map((err, idx) => <li key={idx}>{err}</li>)
           }
           </ul>
         </div>
-        <form onSubmit={submit}>
+        <form
+          onSubmit={submit}
+          className='form'
+        >
           <input
             type='text'
             placeholder='email@website.com'

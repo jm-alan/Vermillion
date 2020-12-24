@@ -1,0 +1,16 @@
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;    
+    background-color: rgb(82, 94, 105);
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+}

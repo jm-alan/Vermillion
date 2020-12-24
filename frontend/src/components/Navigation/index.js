@@ -1,29 +1,46 @@
 import { NavLink } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { LogOut } from '../../store/session';
+import { useSelector } from 'react-redux';
 
 export default function Navigation () {
   const user = useSelector(({ session: { user } }) => user);
-  if (user) {
-    return (
-      <nav>
-        <h1>{user.name} is logged in!</h1>
-        <button
-          style={{
-            maxWidth: '500px'
-          }}
-        >Log Out
-        </button>
-      </nav>
-    );
-  } else {
-    return (
-      <nav>
-        <button>Log In</button>
-        <button>Sign Up</button>
-      </nav>
-    )
-    ;
-  }
+
+  return (
+    <div className='navBar'>
+      {
+        [
+          (
+            !user
+              ? (
+                <div className='navHolder'>
+                  <NavLink to='/login'>
+                    <button>
+                      Log In
+                    </button>
+                  </NavLink>
+                  <NavLink to='/signup'>
+                    <button>
+                      Sign Up
+                    </button>
+                  </NavLink>
+                </div>
+                )
+              : (
+                <div className='navHolder'>
+                  <NavLink to='/'>
+                    <button>
+                      Home
+                    </button>
+                  </NavLink>
+                </div>
+                )
+          ),
+          (
+            <div key='profile' className='profileButtonHolder profile'>
+              <i className='fas fa-user-circle' />
+            </div>
+          )
+        ]
+      }
+    </div>
+  );
 }

@@ -12,7 +12,7 @@ function App () {
 
   useEffect(() => {
     dispatch(userStateActions.Restore());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

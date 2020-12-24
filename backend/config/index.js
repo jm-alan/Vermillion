@@ -5,7 +5,7 @@ module.exports = {
     username: process.env.DB_FROGGY,
     password: process.env.DB_FRESH,
     database: process.env.DB_KRISPY,
-    host: process.env.DB_KREME
+    host: process.env.DB_KREME,
   },
   jwtConfig: {
     secret: process.env.JWT_SECRET,
