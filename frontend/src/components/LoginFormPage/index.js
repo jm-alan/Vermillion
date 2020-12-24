@@ -24,7 +24,7 @@ export default function LoginFormPage () {
   if (user) return <Redirect to='/' />;
   else {
     return (
-      <div className={classes.formContainer}>
+      <div className={classes.Testing}>
         <div
           className={classes.errors}
           style={{

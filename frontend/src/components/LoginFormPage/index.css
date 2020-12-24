@@ -1,4 +1,4 @@
-div.errors {
+.Testing div.errors {
     box-sizing: border-box;
     transition: height 0.45s;
     position: relative;
@@ -13,7 +13,7 @@ div.errors {
     font-size: 20px;
 }
 
-div.form {
+.Testing div.form {
     height: 100%;
     width: 100%;
     display: grid;
@@ -24,7 +24,7 @@ div.form {
     overflow-x: hidden;
 }
 
-ul {
+.Testing ul {
     align-items: center;
     justify-items: center;
     flex-basis: auto;
@@ -35,18 +35,18 @@ ul {
     list-style-type: none;
 }
 
-form {
+.Testing form {
     box-sizing: content-box;
     display: flex;
     flex-direction: column;
 }
 
-form, div.errors {
+.Testing form, .Testing div.errors {
     width: 100%;
     max-width: 500px;
 }
 
-input, button {
+.Testing input, .Testing button {
     width: 100%;
     color: white;
     font-size: 20px;
@@ -62,20 +62,23 @@ input, button {
     background-color: #1B1F23;
 }
 
-input::placeholder {
+.Testing input::placeholder {
     color: rgba(211, 211, 211, 0.5)
 }
 
-input:focus, button:focus {
+.Testing input:focus, .Testing button:focus {
     outline: none;
+}
+
+.Testing input:focus {
     background-color: rgb(98, 101, 105);
 }
 
-input:focus::placeholder {
+.Testing input:focus::placeholder {
     color: transparent;
 }
 
-button:active {
+.Testing button:active {
     top: 2px;
     left: 2px;
     box-shadow: none;
