@@ -14,18 +14,21 @@ div.writeContainer {
 
 #preview img {
     height: auto;
-    width: 100%;
+    max-width: 100%;
 }
 
 #preview {
+    z-index: 0;
     box-sizing: content-box;
-    max-height: 500px;
+    max-height: 1000px;
     padding: 10px;
     background-color: white;
     overflow-y: auto;
+    box-shadow: 2px 2px 2px;
 }
 
 #postCreator {
+    z-index: 2;
     padding: 12px;
     width: 100%;
     box-sizing: border-box;
