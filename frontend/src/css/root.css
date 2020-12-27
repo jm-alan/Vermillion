@@ -2,8 +2,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 100%;    
-    background-color: rgb(82, 94, 105);
+    width: 100%;
 }
 
 html {
@@ -11,6 +10,10 @@ html {
 }
 
 body {
+    box-sizing: border-box;
     height: 100%;
     margin: 0;
+    padding: 10px;
+    background-color: rgb(82, 94, 105);
+    font-family: sans-serif;
 }
