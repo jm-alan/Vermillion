@@ -1,19 +1,13 @@
 export default function (symbol) {
   const RTEinput = document.getElementById('postCreator');
 
-  const {
-    value: oldValue,
-    selectionStart,
-    selectionEnd
-  } = RTEinput;
+  const { value, selectionStart, selectionEnd } = RTEinput;
 
-  const chopText = oldValue.slice(selectionStart, selectionEnd);
+  const chopText = value.slice(selectionStart, selectionEnd);
 
   RTEinput.value = [
-    oldValue.substring(0, selectionStart),
-    symbol,
-    chopText,
-    symbol,
-    oldValue.substring(selectionEnd, oldValue.length)
+    value.substring(0, selectionStart),
+    `${symbol}${chopText}${symbol}`,
+    value.substring(selectionEnd, value.length)
   ].join('');
 }

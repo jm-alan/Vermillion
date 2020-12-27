@@ -4,7 +4,7 @@ import sanitize from 'sanitize-html';
 import markup from 'marked';
 
 import placeholders from './placeholders';
-import { bold, italic } from '../../utils/markMods';
+import { bold, italic, link } from '../../utils/markMods';
 
 const sanitizeOptions = { allowedAttributes: { ...sanitize.defaults.allowedAttributes, img: ['src', 'alt'] }, allowedTags: [...sanitize.defaults.allowedTags, 'img'] };
 
@@ -18,7 +18,7 @@ export default function RTE () {
   const buttonActions = {
     bold,
     italic,
-    link: () => {},
+    link,
     img: () => {},
     code: () => {}
   };
