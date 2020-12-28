@@ -14,8 +14,6 @@ export default function demoLogin (dispatch, login) {
 }
 
 const typePretty = (field, toType) => {
-  field.focus();
-
   let current = 0;
   const time = 80;
 
