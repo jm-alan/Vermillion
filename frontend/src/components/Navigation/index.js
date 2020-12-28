@@ -1,10 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { LogOut } from '../../store/session';
 
 import ProfileButton from './ProfileButton';
 
 export default function Navigation () {
   const user = useSelector(({ session: { user } }) => user);
+  const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(LogOut());
+  };
 
   return (
     <div className='navBar'>
@@ -14,12 +19,12 @@ export default function Navigation () {
             !user
               ? (
                 <div className='navHolder'>
-                  <NavLink to='/login'>
+                  <NavLink to='/login' key='login'>
                     <button>
                       Log In
                     </button>
                   </NavLink>
-                  <NavLink to='/signup'>
+                  <NavLink to='/signup' key='signup'>
                     <button>
                       Sign Up
                     </button>
@@ -33,6 +38,11 @@ export default function Navigation () {
                       Home
                     </button>
                   </NavLink>
+                  <button
+                    onClick={logout}
+                  >
+                    Log Out
+                  </button>
                 </div>
                 )
           ),
