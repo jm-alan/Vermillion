@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import { LogIn } from '../../store/session';
-import { Redirect } from 'react-router-dom';
+import prettyLogin from '../../utils/prettyLogin';
 
 export default function LoginFormPage () {
   const user = useSelector(({ session: { user } }) => user);
@@ -43,7 +44,7 @@ export default function LoginFormPage () {
           className='form'
         >
           <input
-            className='input'
+            className='input identification'
             placeholder='Username or Email'
             name='username'
             type='text'
@@ -52,7 +53,7 @@ export default function LoginFormPage () {
             required
           />
           <input
-            className='input'
+            className='input password'
             placeholder='Password'
             name='password'
             type='password'
@@ -60,7 +61,14 @@ export default function LoginFormPage () {
             onChange={({ target: { value } }) => updatePassword(value)}
             required
           />
-          <button className='button' type='submit'>Log In</button>
+          <button className='button login' type='submit'>Log In</button>
+          <button
+            type='button'
+            className='button demo'
+            onClick={() => prettyLogin(dispatch, LogIn)}
+          >
+            Demo User Login
+          </button>
         </form>
       </div>
     );

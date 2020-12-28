@@ -1,4 +1,4 @@
-export default function (symbol) {
+export default function textMod (symbol) {
   const RTEinput = document.getElementById('postCreator');
 
   const { value, selectionStart, selectionEnd } = RTEinput;
