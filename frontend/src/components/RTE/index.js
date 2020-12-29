@@ -43,7 +43,7 @@ export default function RTE () {
                 className='editorButton'
                 onClick={() => {
                   buttonActions[action]();
-                  editorBox.innerText = window.getSelection().toString();
+                  updateRTEtext(window.getSelection().toString());
                   preview.innerHTML = editorBox
                     ? sanitize(markup(editorBox.value.toString()), sanitizeOptions)
                     : preview.innerHTML;
