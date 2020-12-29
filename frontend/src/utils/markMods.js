@@ -1,40 +1,38 @@
 import textMod from './textMod';
 
-export const bold = () => textMod('**');
-export const italic = () => textMod('*');
-export const img = () => {
-  const RTEinput = document.getElementById('postCreator');
-  const { value, selectionStart, selectionEnd } = RTEinput;
-  const chopText = value.slice(selectionStart, selectionEnd);
-  if (chopText) {
-    RTEinput.value = [
-      value.substring(0, selectionStart),
-      `![display text](${chopText})`,
-      value.substring(selectionEnd, value.length)
-    ].join('');
-  } else {
-    RTEinput.value = [
-      value.substring(0, selectionStart),
-      '![display text](https://example.website.com)',
-      value.substring(selectionEnd, value.length)
-    ].join('');
-  }
+export const bold = (updater) => textMod('**', updater);
+
+export const italic = (updater) => textMod('*', updater);
+
+export const code = (updater) => textMod('`', updater);
+
+export const img = (updater) => {
+  const { selectionStart, selectionEnd } = document.getElementById('postCreator');
+
+  updater(old => [
+    old.substring(0, selectionStart),
+      `![display text](${old.slice(selectionStart, selectionEnd) ||
+        'https://www.example.com/image.jpg'})`,
+      old.substring(selectionEnd, old.length)
+  ].join(''));
 };
-export const link = () => {
-  const RTEinput = document.getElementById('postCreator');
-  const { value, selectionStart, selectionEnd } = RTEinput;
-  const chopText = value.slice(selectionStart, selectionEnd);
-  if (chopText) {
-    RTEinput.value = [
-      value.substring(0, selectionStart),
-      `[display text](${chopText})`,
-      value.substring(selectionEnd, value.length)
-    ].join('');
-  } else {
-    RTEinput.value = [
-      value.substring(0, selectionStart),
-      '[display text](https://example.website.com)',
-      value.substring(selectionEnd, value.length)
-    ].join('');
-  }
+
+export const link = (updater) => {
+  const { selectionStart, selectionEnd } = document.getElementById('postCreator');
+  updater(old => [
+    old.substring(0, selectionStart),
+    `[display text](${old.slice(selectionStart, selectionEnd) ||
+      'https://www.example.com'})`,
+    old.substring(selectionEnd, old.length)
+  ].join(''));
+};
+
+export const codeblock = (updater) => {
+  const { selectionStart, selectionEnd } = document.getElementById('postCreator');
+  updater(old => [
+    old.substring(0, selectionStart),
+    `\`\`\`\n${old.slice(selectionStart, selectionEnd) ||
+      'Codestuffs'}\n\`\`\``,
+    old.substring(selectionEnd, old.length)
+  ].join(''));
 };

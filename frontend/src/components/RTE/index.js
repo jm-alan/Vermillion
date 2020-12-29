@@ -1,35 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import sanitize from 'sanitize-html';
-import markup from 'marked';
 
 import placeholders from './placeholders';
-import { bold, italic, link, img } from '../../utils/markMods';
+import { bold, italic, link, img, code, codeblock } from '../../utils/markMods';
 import Preview from '../Preview';
+import previewDebouncer from '../../utils/previewDebouncer';
 
-const sanitizeOptions = {
-  allowedAttributes: {
-    ...sanitize.defaults.allowedAttributes,
-    img: ['src', 'alt']
-  },
-  allowedTags: [...sanitize.defaults.allowedTags, 'img']
-};
-
-const debouncer = () => {
-  let interval;
-  return (value, updater) => {
-    if (interval) clearTimeout(interval);
-    interval = setTimeout(() => {
-      updater(sanitize(markup(value.toString()), sanitizeOptions));
-    }, 500);
-  };
-};
-
-const debouncePreviewUpdate = debouncer();
+const debouncePreviewUpdate = previewDebouncer();
 
 export default function RTE () {
   const dispatch = useDispatch();
-  const editorBox = document.getElementById('postCreator');
 
   const [RTEtext, updateRTEtext] = useState('');
   const [previewContents, updatePreviewContents] = useState('');
@@ -39,37 +19,39 @@ export default function RTE () {
     italic,
     link,
     img,
-    code: () => {}
+    code,
+    codeblock
   };
-  const buttons = ['bold', 'italic', 'link', 'img', 'code'];
+  const buttons = ['bold', 'italic', 'link', 'img', 'code', 'codeblock'];
   const icons = {
     bold: <i className='fas fa-bold' />,
     italic: <i className='fas fa-italic' />,
     link: <i className='fas fa-link' />,
     img: <i className='fas fa-image' />,
-    code: <i className='fas fa-code' />
-
+    code: <i className='fas fa-terminal' />,
+    codeblock: <i className='fas fa-code' />
   };
+
+  useEffect(() => {
+    debouncePreviewUpdate(RTEtext, updatePreviewContents);
+  }, [RTEtext]);
 
   return (
     <div className='RTE textEditor createPost'>
       <div id='editorBar'>
         {
-            buttons.map(action => (
-              <button
-                key={action}
-                title={action}
-                className='editorButton'
-                onClick={() => {
-                  buttonActions[action]();
-                  editorBox.innerText = window.getSelection().toString();
-                  updatePreviewContents(sanitize(markup(editorBox.value.toString())));
-                  editorBox.focus();
-                }}
-              >
-                {icons[action]}
-              </button>
-            ))
+          buttons.map(action => (
+            <button
+              key={action}
+              title={action}
+              className='editorButton'
+              onClick={() => {
+                buttonActions[action](updateRTEtext);
+              }}
+            >
+              {icons[action]}
+            </button>
+          ))
         }
       </div>
       <div className='writeContainer container editbox'>
@@ -81,7 +63,7 @@ export default function RTE () {
               updateRTEtext(() => value.toString());
               debouncePreviewUpdate(value, updatePreviewContents);
             }
-        }
+          }
           value={RTEtext}
         />
       </div>

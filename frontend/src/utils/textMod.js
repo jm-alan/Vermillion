@@ -1,13 +1,10 @@
-export default function textMod (symbol) {
-  const RTEinput = document.getElementById('postCreator');
+export default function textMod (symbol, updater) {
+  const { selectionStart, selectionEnd } = document.getElementById('postCreator');
 
-  const { value, selectionStart, selectionEnd } = RTEinput;
-
-  const chopText = value.slice(selectionStart, selectionEnd);
-
-  RTEinput.value = [
-    value.substring(0, selectionStart),
-    `${symbol}${chopText}${symbol}`,
-    value.substring(selectionEnd, value.length)
-  ].join('');
+  updater(old => [
+    old.substring(0, selectionStart),
+    `${symbol}${old.slice(selectionStart, selectionEnd) ||
+    'Your text here'}${symbol}`,
+    old.substring(selectionEnd, old.length)
+  ].join(''));
 }

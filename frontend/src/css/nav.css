@@ -21,6 +21,7 @@
 }
 
 .navHolder button {
+    font-weight: bold;
     position: relative;
     box-shadow: 2px 2px 2px black;
     width: 100px;
