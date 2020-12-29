@@ -1,25 +1,29 @@
 div.RTE {
-    margin: 10px auto;
     width: 100%;
     max-width: 1000px;
-    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto;
+}
+
+div.lamb {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 2px 0px;
 }
 
 div.writeContainer {
-    display: grid;
-    grid-template-rows: auto;
     width: 100%;
     height: 100%;
 }
 
 #preview img {
     height: auto;
+    max-height: 700px;
     max-width: 100%;
 }
 
 #preview {
-    z-index: 0;
-    box-sizing: content-box;
+    box-sizing: border-box;
     max-height: 1000px;
     padding: 10px;
     background-color: white;
@@ -28,16 +32,16 @@ div.writeContainer {
 }
 
 #postCreator {
-    z-index: 2;
-    padding: 12px;
     width: 100%;
+    height: 100%;
+    padding: 12px;
     box-sizing: border-box;
     border: none;
     box-shadow: 2px 2px 2px;
 }
 
 #postCreator, #preview {
-    height: 80%;
+    height: 100%;
 }
 
 #postCreator:focus {

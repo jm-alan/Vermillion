@@ -4,22 +4,41 @@ import sanitize from 'sanitize-html';
 import markup from 'marked';
 
 import placeholders from './placeholders';
-import { bold, italic, link } from '../../utils/markMods';
+import { bold, italic, link, img } from '../../utils/markMods';
+import Preview from '../Preview';
 
-const sanitizeOptions = { allowedAttributes: { ...sanitize.defaults.allowedAttributes, img: ['src', 'alt'] }, allowedTags: [...sanitize.defaults.allowedTags, 'img'] };
+const sanitizeOptions = {
+  allowedAttributes: {
+    ...sanitize.defaults.allowedAttributes,
+    img: ['src', 'alt']
+  },
+  allowedTags: [...sanitize.defaults.allowedTags, 'img']
+};
+
+const debouncer = () => {
+  let interval;
+  return (value, updater) => {
+    if (interval) clearTimeout(interval);
+    interval = setTimeout(() => {
+      updater(sanitize(markup(value.toString()), sanitizeOptions));
+    }, 500);
+  };
+};
+
+const debouncePreviewUpdate = debouncer();
 
 export default function RTE () {
   const dispatch = useDispatch();
   const editorBox = document.getElementById('postCreator');
-  const preview = document.getElementById('preview');
 
   const [RTEtext, updateRTEtext] = useState('');
+  const [previewContents, updatePreviewContents] = useState('');
 
   const buttonActions = {
     bold,
     italic,
     link,
-    img: () => {},
+    img,
     code: () => {}
   };
   const buttons = ['bold', 'italic', 'link', 'img', 'code'];
@@ -44,9 +63,7 @@ export default function RTE () {
                 onClick={() => {
                   buttonActions[action]();
                   editorBox.innerText = window.getSelection().toString();
-                  preview.innerHTML = editorBox
-                    ? sanitize(markup(editorBox.value.toString()), sanitizeOptions)
-                    : preview.innerHTML;
+                  updatePreviewContents(sanitize(markup(editorBox.value.toString())));
                   editorBox.focus();
                 }}
               >
@@ -55,23 +72,22 @@ export default function RTE () {
             ))
         }
       </div>
-      <div className='writeContainer'>
+      <div className='writeContainer container editbox'>
         <textarea
           id='postCreator'
           placeholder={`${placeholders[Math.round(Math.random() * 4)]}`}
           onChange={
             ({ target: { value } }) => {
               updateRTEtext(() => value.toString());
-              if (preview) {
-                preview.innerHTML = editorBox
-                  ? sanitize(markup(editorBox.value.toString()), sanitizeOptions)
-                  : preview.innerHTML;
-              }
+              debouncePreviewUpdate(value, updatePreviewContents);
             }
         }
           value={RTEtext}
         />
-        <div id='preview' />
+      </div>
+      <div className='lamb'>Preview:</div>
+      <div className='previewContainer container'>
+        <Preview contents={previewContents} />
       </div>
     </div>
   );
