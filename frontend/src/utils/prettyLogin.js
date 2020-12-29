@@ -1,7 +1,7 @@
 export default function demoLogin (dispatch, login) {
   const identification = document.querySelector('input.identification');
   const password = document.querySelector('input.password');
-  const button = document.querySelector('button.login');
+  const button = document.querySelector('.button.login');
   typePretty(identification, 'demoMan');
   typePretty(password, 'password');
   setTimeout(() => {

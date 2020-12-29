@@ -14,20 +14,30 @@
 }
 
 .navHolder {
-    width: 100%;
-    max-width: 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 300px;
+    max-width: 230px;
 }
 
-.navBar button {
+.navHolder button {
     position: relative;
     box-shadow: 2px 2px 2px black;
-    width: 100%;
+    width: 100px;
     border: none;
     border-radius: 10px;
     color: white;
     height: 100%;
     box-sizing: border-box;
     background-color: #1B1F23;
+}
+
+.navHolder button.home, .navHolder button.login {
+    grid-column-start: 1;
+}
+
+.navHolder button.logout, .navHolder button.signup {
+    grid-column-start: 3;
 }
 
 .navHolder button:active {

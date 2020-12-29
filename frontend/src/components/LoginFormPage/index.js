@@ -61,7 +61,11 @@ export default function LoginFormPage () {
             onChange={({ target: { value } }) => updatePassword(value)}
             required
           />
-          <button className='button login' type='submit'>Log In</button>
+          <button
+            className='button login'
+            type='submit'
+          >Log In
+          </button>
           <button
             type='button'
             className='button demo'

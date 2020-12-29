@@ -20,12 +20,12 @@ export default function Navigation () {
               ? (
                 <div className='navHolder'>
                   <NavLink to='/login' key='login'>
-                    <button>
+                    <button className='navbutton login'>
                       Log In
                     </button>
                   </NavLink>
                   <NavLink to='/signup' key='signup'>
-                    <button>
+                    <button className='navbutton signup'>
                       Sign Up
                     </button>
                   </NavLink>
@@ -34,12 +34,13 @@ export default function Navigation () {
               : (
                 <div className='navHolder'>
                   <NavLink to='/'>
-                    <button>
+                    <button className='navbutton home'>
                       Home
                     </button>
                   </NavLink>
                   <button
                     onClick={logout}
+                    className='navbutton logout'
                   >
                     Log Out
                   </button>

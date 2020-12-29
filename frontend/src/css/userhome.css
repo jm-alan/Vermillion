@@ -1,0 +1,21 @@
+#homeContainer {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+div.flowContainer {
+  width: 100%;
+  max-width: 1000px;
+  grid-row-start: 2;
+}
+
+div.post.card {
+  width: 100%;
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px rgb(41, 41, 41);
+  min-height: 200px;
+}
