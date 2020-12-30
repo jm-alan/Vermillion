@@ -7,15 +7,35 @@
 }
 
 #homeContainer.default {
-  justify-items: center;
   align-items: center;
+  justify-items: center;
   grid-template-columns: 1fr;
 }
 
 #homeContainer.sideBySide {
   align-items: start;
-  grid-template-columns: 1fr 1fr;
   justify-items: center;
+  grid-template-columns: 1fr 1fr;
+}
+
+#homeContainer.sideBySide > div {
+  width: 95%;
+}
+
+@media screen and (max-width: 1020px) {
+  #displayController {
+    display: none;
+  }
+
+  #homeContainer {
+    align-items: center !important;
+    justify-items: center !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  #homeContainer.sideBySide > div {
+    width: 100%;
+  }
 }
 
 #displayController {
@@ -49,10 +69,6 @@
   box-shadow: none;
 }
 
-#homeContainer.sideBySide > div {
-  width: 95%;
-}
-
 div.flowContainer {
   margin-top: 20px;
   box-sizing: border-box;
@@ -65,6 +81,7 @@ div.flowContainer {
 }
 
 div.post.card {
+  padding: 3px 5px;
   margin: 40px 0;
   width: 100%;
   background-color: white;
@@ -74,20 +91,13 @@ div.post.card {
   min-height: 200px;
 }
 
-div.post.card h1 {
+div.post.card h1,
+div.post.card h2,
+div.post.card h3,
+div.post.card h4,
+div.post.card h5,
+div.post.card h6 {
   margin: 0px;
-}
-
-@media screen and (max-width: 1020px) {
-  #displayController {
-    display: none;
-  }
-
-  #homeContainer {
-    justify-items: center;
-    align-items: center !important;
-    grid-template-columns: 1fr !important;
-  }
 }
 
 pre {

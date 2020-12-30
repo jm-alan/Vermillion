@@ -38,23 +38,28 @@ export default function RTE () {
 
   return (
     <div className='RTE textEditor createPost'>
-      <div id='editorBar'>
-        {
-          buttons.map(action => (
-            <button
-              key={action}
-              title={action}
-              className='editorButton'
-              onClick={() => {
-                buttonActions[action](updateRTEtext);
-              }}
-            >
-              {icons[action]}
-            </button>
-          ))
-        }
-      </div>
       <div className='writeContainer container editbox'>
+        <input
+          className='title'
+          type='text'
+          placeholder='Title'
+        />
+        <div id='editorBar'>
+          {
+            buttons.map(action => (
+              <button
+                key={action}
+                title={action}
+                className='editorButton'
+                onClick={() => {
+                  buttonActions[action](updateRTEtext);
+                }}
+              >
+                {icons[action]}
+              </button>
+            ))
+          }
+        </div>
         <textarea
           id='postCreator'
           placeholder={`${placeholders[Math.round(Math.random() * 4)]}`}
@@ -67,7 +72,10 @@ export default function RTE () {
           value={RTEtext}
         />
       </div>
-      <div className='lamb'>Preview:</div>
+      <div className='lamb'>
+        <hr />
+        Preview:
+      </div>
       <div className='previewContainer container'>
         <Preview contents={previewContents} />
       </div>

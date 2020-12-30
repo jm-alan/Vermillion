@@ -3,6 +3,11 @@ div.RTE {
     max-width: 1000px;
     display: grid;
     grid-template-rows: auto;
+    background-color: grey;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px black;
 }
 
 div.lamb {
@@ -19,32 +24,35 @@ div.writeContainer {
     height: 100%;
 }
 
+input.title {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 5px;
+    height: 50px;
+    font-size: 20px;
+    box-shadow: 2px 2px 2px black;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+input.title:focus {
+    outline: none;
+}
+
 #preview img {
     height: auto;
     max-height: 500px;
     max-width: 100%;
 }
 
-#preview {
-    box-sizing: border-box;
-    border-radius: 5px;
-    max-height: 500px;
-    padding: 10px;
-    background-color: white;
-    overflow-y: auto;
-    box-shadow: 2px 2px 2px;
-}
-
 #postCreator {
-    width: 100%;
-    padding: 12px;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 2px 2px 2px;
+    font-size: 20px;
+    font-family: sans-serif;
 }
 
 #postCreator, #preview {
+    width: 100%;
     min-height: 100px;
     box-sizing: border-box;
     border-radius: 5px;

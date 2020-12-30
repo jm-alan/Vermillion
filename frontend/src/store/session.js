@@ -34,10 +34,7 @@ export const SignUp = ({ username, email, password }) => async dispatch => {
   if (signupResponse) dispatch(constructSession(signupResponse.data.user));
 };
 
-export default function sessionReducer (
-  state = { user: null },
-  { type, user = null }
-) {
+export default function sessionReducer (state = { user: null }, { type, user = null }) {
   if (type === USER) return { ...state, user };
   else return state;
 }
