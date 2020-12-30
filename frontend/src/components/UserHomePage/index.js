@@ -16,7 +16,7 @@ export default function UserHomePage () {
         <button
           onClick={() => changeInline(display => !display)}
         >
-          Display: {isInline ? 'inline' : 'side-by-side'}
+          Display Mode: {isInline ? 'inline' : 'side-by-side'}
         </button>
       </div>
       <div
