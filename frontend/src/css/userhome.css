@@ -80,9 +80,13 @@ div.flowContainer {
   max-height: 100%;
 }
 
+#homeContainer.sideBySide .flowContainer {
+  margin-top: 0;
+}
+
 div.post.card {
   padding: 3px 5px;
-  margin: 40px 0;
+  margin-bottom: 40px;
   width: 100%;
   background-color: white;
   box-sizing: border-box;

@@ -37,7 +37,7 @@ export default function RTE () {
   }, [RTEtext]);
 
   return (
-    <div className='RTE textEditor createPost'>
+    <div className='RTE textEditor'>
       <div className='writeContainer container editbox'>
         <input
           className='title'
@@ -79,6 +79,10 @@ export default function RTE () {
       <div className='previewContainer container'>
         <Preview contents={previewContents} />
       </div>
+      <button
+        className='submit createPost'
+      >Post
+      </button>
     </div>
   );
 }

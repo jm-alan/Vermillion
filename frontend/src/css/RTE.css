@@ -25,6 +25,7 @@ div.writeContainer {
 }
 
 input.title {
+    font-weight: bolder;
     width: 100%;
     box-sizing: border-box;
     border: none;
@@ -37,6 +38,44 @@ input.title {
 }
 
 input.title:focus {
+    outline: none;
+}
+
+button.submit.createPost {
+    position: relative;
+    width: 10%;
+    height: 40px;
+    justify-self: right;
+    font-weight: bold;
+    font-size: larger;
+    color: white;
+    background-color: #1b1f23;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px black;
+}
+
+button.submit.createPost:focus {
+    outline: none;
+}
+
+button.submit.createPost:active {
+    top: 2px;
+    left: 2px;
+    box-shadow: none;
+}
+
+#editorBar button {
+    font-size: large;
+    width: 33px;
+    background-color: black;
+    color: white;
+    border: none;
+    margin: 0px 2px;
+    border-radius: 3px;
+}
+
+#editorBar button:focus {
     outline: none;
 }
 
@@ -61,6 +100,10 @@ input.title:focus {
     background-color: white;
     overflow-y: auto;
     box-shadow: 2px 2px 2px;
+}
+
+#homeContainer.sideBySide #preview {
+    max-height: calc(70vh - 20px);
 }
 
 #postCreator:focus {
