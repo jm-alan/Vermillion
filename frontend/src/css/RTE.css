@@ -1,6 +1,7 @@
 div.RTE {
     width: 100%;
     max-width: 1000px;
+    max-height: 600px;
     display: grid;
     grid-template-rows: auto;
     background-color: grey;
@@ -12,7 +13,7 @@ div.RTE {
 
 div.lamb {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 300;
     height: 100%;
     min-height: 30px;
     padding: 2px 0px;
@@ -31,6 +32,7 @@ input.title {
     border-radius: 5px;
     height: 50px;
     font-size: 20px;
+    font-weight: bold;
     box-shadow: 2px 2px 2px black;
     margin-bottom: 10px;
     padding: 10px;
@@ -54,6 +56,7 @@ input.title:focus {
 #postCreator, #preview {
     width: 100%;
     min-height: 100px;
+    border: none;
     box-sizing: border-box;
     border-radius: 5px;
     max-height: 500px;
