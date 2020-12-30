@@ -25,6 +25,10 @@ div.writeContainer {
     height: 100%;
 }
 
+div.previewContainer {
+    max-height: 100%;
+}
+
 input.title {
     width: 100%;
     box-sizing: border-box;
@@ -58,7 +62,7 @@ input.title:focus {
     min-height: 100px;
     box-sizing: border-box;
     border-radius: 5px;
-    max-height: 500px;
+    max-height: 300px;
     padding: 10px;
     background-color: white;
     overflow-y: auto;
