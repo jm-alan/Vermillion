@@ -1,6 +1,9 @@
 {
   "name": "vermillion",
   "version": "1.0.0",
+  "engines": {
+    "node":"14.x"
+  },
   "description": "Full stack solo project, Tumblr clone - React/Redux/Express",
   "main": "index.js",
   "scripts": {

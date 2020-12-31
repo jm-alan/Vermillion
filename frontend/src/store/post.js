@@ -6,16 +6,19 @@ const ENUMERATE = 'post/ENUMERATE';
 
 const renderPost = content => ({ type: CREATE, content });
 
+const renderFollows = follwing => ({ type: ENUMERATE, follwing });
+
 export const CreatePost = content => async dispatch => {
   const newPostResponse = await csrfetch('/api/posts', { method: 'POST', body: JSON.stringify({ content }) });
-  console.log('new post response:', newPostResponse);
-  if (newPostResponse) dispatch(renderPost(newPostResponse));
+  if (newPostResponse) dispatch(renderPost(newPostResponse.data.newPost));
   return newPostResponse;
 };
 
 export const EnumerateHome = follower => async dispatch => {
-    const followedPostsResponse = await csrfetch('/api/posts/following');
-}
+  const followedPostsResponse = await csrfetch('/api/posts/following');
+  if (followedPostsResponse) dispatch(renderFollows());
+  return followedPostsResponse;
+};
 
 export default function postReducer (state = { content: null }, { type, content }) {
   switch (type) {

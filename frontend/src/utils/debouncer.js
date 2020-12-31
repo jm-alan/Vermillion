@@ -14,7 +14,6 @@ export default function debounceCreator () {
   return (value, updater) => {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      console.log('Timer successfully finished');
       updater(() => sanitize(markup(value.toString()), sanitizeOptions));
     }, 500);
   };

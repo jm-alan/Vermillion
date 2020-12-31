@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler');
 const clean = require('sanitize-html');
 const { requireAuth } = require('../../utils/auth');
 
-const { Post } = require('../../db/models');
+const db = require('../../db/models');
 
 router.post('/', requireAuth, asyncHandler(async ({ user, body }, res, next) => {
   if (!body || !body.content) {
@@ -17,30 +17,41 @@ router.post('/', requireAuth, asyncHandler(async ({ user, body }, res, next) => 
       let { title, postBody } = body.content;
       title = title || null;
       postBody = postBody || null;
-      if (title ?? true)
-        throw new Error('Title cannot be blank');
-      if (postBody ?? true)
-        throw new Error('Body cannot be blank');
-      await Post.create({
-        ...body.content,
+      if (!(title ?? false)) {
+        const err = new Error('Title cannot be blank');
+        err.internalValidate = true;
+        throw err;
+      }
+      if (!(postBody ?? false)) {
+        const err = new Error('Body cannot be blank');
+        err.internalValidate = true;
+        throw err;
+      }
+      const newPost = await db.Post.create({
+        title,
+        body: postBody,
         userId: user.id ?? 0,
         hearts: 0,
         reblogs: 0,
         isReply: false,
         isReblog: false
       });
+      res.json({ newPost });
     } catch (err) {
-      if (process.env.NODE_ENV !== 'production')
-        {
-          console.warn('Sequelize error');
-          console.warn(err);
-        }
-      next(err);
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Sequelize error');
+        console.warn(err);
+      }
+      if (err.internalValidate) return next(err);
+      return next(Error('Something went wrong. Please refresh the page and try again.'));
     }
-    console.log(body.content);
-    console.log(clean(body.content.postBody));
-    res.json({});
   }
+}));
+
+router.get('/following', requireAuth, asyncHandler(async ({ user: { id: follower } }, res) => {
+  const followIds = await db.Follow.findAll({ where: { follower }, attributes: ['following'] });
+  console.log(followIds);
+  res.send();
 }));
 
 module.exports = router;

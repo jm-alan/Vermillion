@@ -48,7 +48,7 @@ input.title:focus::placeholder {
 button.submit.createPost {
     margin-top: 10px;
     position: relative;
-    width: 10%;
+    width: 100px;
     height: 40px;
     justify-self: right;
     font-weight: bold;
@@ -76,7 +76,7 @@ button.submit.createPost:active {
     background-color: black;
     color: white;
     border: none;
-    margin: 0px 2px;
+    margin-right: 2px;
     border-radius: 3px;
 }
 
@@ -84,20 +84,26 @@ button.submit.createPost:active {
     outline: none;
 }
 
-#preview img {
+img {
     height: auto;
     max-height: 500px;
     max-width: 100%;
+}
+
+#preview, div.previewContainer {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 #postCreator {
     font-size: 20px;
     font-family: sans-serif;
     border: none;
+    width: 100%;
 }
 
 #postCreator, #preview {
-    width: 100%;
     min-height: 100px;
     box-sizing: border-box;
     border-radius: 5px;
@@ -106,10 +112,6 @@ button.submit.createPost:active {
     background-color: white;
     overflow-y: auto;
     box-shadow: 2px 2px 2px;
-}
-
-#homeContainer.sideBySide #preview {
-    max-height: calc(70vh - 20px);
 }
 
 #postCreator:focus {

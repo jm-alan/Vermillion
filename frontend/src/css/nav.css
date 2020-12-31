@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .navBar .profile {
@@ -49,4 +50,10 @@
 
 .navHolder button:focus {
     outline: none;
+}
+
+@media screen and (max-width: 1020px) {
+    .navBar {
+        margin: 0px 10px 10px 10px;
+    }
 }

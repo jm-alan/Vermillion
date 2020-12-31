@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { LogOut } from '../../store/session';
 
 import ProfileButton from './ProfileButton';
