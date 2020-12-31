@@ -41,7 +41,12 @@ input.title:focus {
     outline: none;
 }
 
+input.title:focus::placeholder {
+    color: transparent;
+}
+
 button.submit.createPost {
+    margin-top: 10px;
     position: relative;
     width: 10%;
     height: 40px;
@@ -88,6 +93,7 @@ button.submit.createPost:active {
 #postCreator {
     font-size: 20px;
     font-family: sans-serif;
+    border: none;
 }
 
 #postCreator, #preview {

@@ -1,86 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import placeholders from './placeholders';
-import { bold, italic, link, img, code, codeblock } from '../../utils/markMods';
-import Preview from '../Preview';
-import previewDebouncer from '../../utils/previewDebouncer';
+import Title from './Title';
+import ButtonBar from './ButtonBar';
+import BodyBox from './BodyBox';
+import Preview from './Preview';
+import debouncer from '../../utils/debouncer';
+import { CreatePost } from '../../store/post';
 
-const debouncePreviewUpdate = previewDebouncer();
+const newDebouncer = debouncer();
 
 export default function RTE () {
   const dispatch = useDispatch();
 
+  const [title, updateTitle] = useState('');
   const [RTEtext, updateRTEtext] = useState('');
   const [previewContents, updatePreviewContents] = useState('');
 
-  const buttonActions = {
-    bold,
-    italic,
-    link,
-    img,
-    code,
-    codeblock
-  };
-  const buttons = ['bold', 'italic', 'link', 'img', 'code', 'codeblock'];
-  const icons = {
-    bold: <i className='fas fa-bold' />,
-    italic: <i className='fas fa-italic' />,
-    link: <i className='fas fa-link' />,
-    img: <i className='fas fa-image' />,
-    code: <i className='fas fa-terminal' />,
-    codeblock: <i className='fas fa-code' />
+  const postSubmit = () => {
+    dispatch(CreatePost({ title, postBody: previewContents }));
   };
 
   useEffect(() => {
-    debouncePreviewUpdate(RTEtext, updatePreviewContents);
+    newDebouncer(RTEtext, updatePreviewContents);
   }, [RTEtext]);
 
   return (
     <div className='RTE textEditor'>
       <div className='writeContainer container editbox'>
-        <input
-          className='title'
-          type='text'
-          placeholder='Title'
-        />
-        <div id='editorBar'>
-          {
-            buttons.map(action => (
-              <button
-                key={action}
-                title={action}
-                className='editorButton'
-                onClick={() => {
-                  buttonActions[action](updateRTEtext);
-                }}
-              >
-                {icons[action]}
-              </button>
-            ))
-          }
-        </div>
-        <textarea
-          id='postCreator'
-          placeholder={`${placeholders[Math.round(Math.random() * 4)]}`}
-          onChange={
-            ({ target: { value } }) => {
-              updateRTEtext(() => value.toString());
-              debouncePreviewUpdate(value, updatePreviewContents);
-            }
-          }
-          value={RTEtext}
+        <Title title={title} updateTitle={updateTitle} />
+        <ButtonBar updateRTEtext={updateRTEtext} />
+        <BodyBox
+          RTEtext={RTEtext}
+          updateRTEtext={updateRTEtext}
+          updatePreviewContents={updatePreviewContents}
         />
       </div>
       <div className='lamb'>
         <hr />
         Preview:
       </div>
-      <div className='previewContainer container'>
-        <Preview contents={previewContents} />
-      </div>
+      <Preview contents={previewContents} />
       <button
         className='submit createPost'
+        onClick={postSubmit}
       >Post
       </button>
     </div>

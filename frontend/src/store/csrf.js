@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const csrfetch = async (url, options = {}) => {
+export default async function csrfetch (url, options = {}) {
   options.method = options.method || 'GET';
   options.headers = options.headers || {};
 
@@ -13,13 +13,9 @@ const csrfetch = async (url, options = {}) => {
 
   const contentType = res.headers.get('content-type');
 
-  if (contentType && contentType.includes('application/json')) {
-    res.data = await res.json();
-  }
+  if (contentType && contentType.includes('application/json')) res.data = await res.json();
 
   if (res.status >= 400) throw res;
 
   return res;
-};
-
-export default csrfetch;
+}

@@ -9,11 +9,12 @@ const sanitizeOptions = {
   allowedTags: [...sanitize.defaults.allowedTags, 'img']
 };
 
-export default function debouncer () {
-  let interval;
+export default function debounceCreator () {
+  let timer;
   return (value, updater) => {
-    if (interval) clearTimeout(interval);
-    interval = setTimeout(() => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      console.log('Timer successfully finished');
       updater(() => sanitize(markup(value.toString()), sanitizeOptions));
     }, 500);
   };
