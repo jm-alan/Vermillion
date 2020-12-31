@@ -4,8 +4,7 @@ import { LogOut } from '../../store/session';
 
 import ProfileButton from './ProfileButton';
 
-export default function Navigation () {
-  const user = useSelector(({ session: { user } }) => user);
+export default function Navigation ({ user }) {
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(LogOut());
