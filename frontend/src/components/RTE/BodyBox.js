@@ -1,6 +1,6 @@
 import placeholders from './placeholders';
 
-export default function BodyBox ({ RTEtext, updateRTEtext }) {
+export default function BodyBox ({ RTEtext, updateRTEtext, placeholder }) {
   return (
     <textarea
       id='postCreator'

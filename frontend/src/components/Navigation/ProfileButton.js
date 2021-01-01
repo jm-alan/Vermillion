@@ -1,16 +1,42 @@
-import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-export default function ProfileButton () {
-  const user = useSelector(({ session: { user } }) => user);
+import { LogOut } from '../../store/session';
 
-  if (user) {
-    return (
-      <NavLink to={`/${user.username}`}>
-        <div className='profileButtonHolder profile'>
-          <i className='fas fa-user-circle' />
+export default function ProfileButton ({ user }) {
+  const dispatch = useDispatch();
+
+  const [popped, togglePopped] = useState(false);
+
+  const toggle = () => togglePopped(popped => !popped);
+  const logout = () => dispatch(LogOut());
+
+  return (
+    <>
+      <div
+        className='profileButtonHolder profile'
+        style={{ textAlign: 'right' }}
+      >
+        <i
+          className='fas fa-user-circle'
+          onClick={toggle}
+        />
+        <div
+          style={{
+            transition: 'all 0.4s',
+            zIndex: 5,
+            position: 'relative',
+            right: '40px',
+            top: popped ? '-45px' : '-100px'
+          }}
+        >
+          <button
+            className='button logout'
+            onClick={logout}
+          >Log Out
+          </button>
         </div>
-      </NavLink>
-    );
-  } else return null;
+      </div>
+    </>
+  );
 }
