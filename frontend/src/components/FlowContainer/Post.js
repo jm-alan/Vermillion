@@ -1,7 +1,9 @@
 export default function Post ({ content }) {
   return (
     <div className='post card'>
-      <h1>One day this will be a post!</h1>
+      <div className='postTitle'>{content.title}</div>
+      <hr />
+      <div className='postBody'>{content.body}</div>
     </div>
   );
 }

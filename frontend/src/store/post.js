@@ -6,7 +6,7 @@ const ENUMERATE = 'post/ENUMERATE';
 
 const renderPost = content => ({ type: CREATE, content });
 
-const renderFollows = follwing => ({ type: ENUMERATE, follwing });
+const untoFollower = content => ({ type: ENUMERATE, content });
 
 export const CreatePost = content => async dispatch => {
   const newPostResponse = await csrfetch('/api/posts', { method: 'POST', body: JSON.stringify({ content }) });
@@ -16,7 +16,7 @@ export const CreatePost = content => async dispatch => {
 
 export const EnumerateHome = follower => async dispatch => {
   const followedPostsResponse = await csrfetch('/api/posts/following');
-  if (followedPostsResponse) dispatch(renderFollows());
+  if (followedPostsResponse) dispatch(untoFollower(followedPostsResponse.posts));
   return followedPostsResponse;
 };
 

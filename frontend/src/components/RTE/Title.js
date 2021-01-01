@@ -3,6 +3,7 @@ export default function Title ({ title, updateTitle }) {
     <input
       className='title'
       type='text'
+      maxLength={100}
       placeholder='Title'
       value={title}
       onChange={({ target: { value } }) => updateTitle(value)}
