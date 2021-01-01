@@ -12,13 +12,11 @@ export const LogIn = ({ identification, password }) => async dispatch => {
     body: JSON.stringify({ identification, password })
   });
   if (loginResponse) dispatch(constructSession(loginResponse.data.user));
-  return loginResponse;
 };
 
 export const LogOut = () => async dispatch => {
   const logoutResponse = await csrfetch('/api/session', { method: 'DELETE' });
   if (logoutResponse) dispatch(deconstructSession());
-  return logoutResponse;
 };
 
 export const Restore = () => async dispatch => {
@@ -34,7 +32,4 @@ export const SignUp = ({ username, email, password }) => async dispatch => {
   if (signupResponse) dispatch(constructSession(signupResponse.data.user));
 };
 
-export default function sessionReducer (state = { user: null }, { type, user = null }) {
-  if (type === USER) return { ...state, user };
-  else return state;
-}
+export const sessionReducer = (state = { user: null }, { type, user = null }) => (type === USER) ? { ...state, user } : state;

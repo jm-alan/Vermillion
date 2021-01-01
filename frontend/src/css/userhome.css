@@ -11,7 +11,7 @@
 }
 
 #homeContainer > div.RTE, div.post.card {
-  box-shadow: 0 0 1rem black;
+  box-shadow: 0 0 0.5rem black;
 }
 
 div.flowContainer {

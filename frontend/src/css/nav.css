@@ -3,6 +3,7 @@
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 10px;
+    height: 40px;
 }
 
 .navBar .profile {
@@ -15,40 +16,33 @@
 }
 
 .navHolder {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    width: 300px;
-    max-width: 230px;
+    width: 200px;
 }
 
-.navHolder button {
+.navBar button {
     font-weight: bold;
     position: relative;
     box-shadow: 2px 2px 2px black;
-    width: 100px;
+    width: 90px;
+    height: 35px;
     border: none;
     border-radius: 10px;
     color: white;
-    height: 100%;
     box-sizing: border-box;
     background-color: #1B1F23;
 }
 
-.navHolder button.home, .navHolder button.login {
-    grid-column-start: 1;
+.navHolder a.active {
+    display: none;
 }
 
-.navHolder button.logout, .navHolder button.signup {
-    grid-column-start: 3;
-}
-
-.navHolder button:active {
+.navBar button:active {
     box-shadow: none;
     top: 2px;
     left: 4px;
 }
 
-.navHolder button:focus {
+.navBar button:focus {
     outline: none;
 }
 

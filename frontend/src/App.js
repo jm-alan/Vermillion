@@ -7,13 +7,13 @@ import SignupFormPage from './components/SignupFormPage';
 import Navigation from './components/Navigation';
 import Home from './components/Home';
 import Page from './components/UniquePage';
-import * as userStateActions from './store/session';
+import { Restore } from './store/session';
 
 export default function App () {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(userStateActions.Restore());
+    dispatch(Restore());
   }, [dispatch]);
 
   return (
