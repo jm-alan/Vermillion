@@ -1,3 +1,6 @@
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+
 import { bold, italic, link, image, code, codeblock } from '../../utils/markMods';
 
 const buttons = [
@@ -11,21 +14,23 @@ const buttons = [
 
 export default function ButtonBar ({ updateRTEtext }) {
   return (
-    <div id='editorBar'>
-      {
-        buttons.map(button => (
-          <button
-            key={button.type}
-            title={button.title}
-            className='editorButton'
-            onClick={() => {
-              button.action(updateRTEtext);
-            }}
-          >
-            {button.icon}
-          </button>
-        ))
-        }
-    </div>
+    <ButtonGroup
+      id='editorBar'
+      variant='contained'
+    >
+      {buttons.map(button => (
+        <Button
+          color='primary'
+          key={button.type}
+          title={button.title}
+          className='editorButton'
+          onClick={() => {
+            button.action(updateRTEtext);
+          }}
+        >
+          {button.icon}
+        </Button>
+      ))}
+    </ButtonGroup>
   );
 }

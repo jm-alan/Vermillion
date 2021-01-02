@@ -25,13 +25,8 @@ div.flowContainer {
 }
 
 div.post.card {
-  padding: 3px 5px;
   margin: 0px auto 40px auto;
   width: 100%;
-  background-color: white;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: none;
   min-height: 200px;
 }
 

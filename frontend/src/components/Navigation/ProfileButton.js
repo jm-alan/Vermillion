@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { LogOut } from '../../store/session';
 
@@ -33,10 +34,7 @@ export default function ProfileButton () {
           textAlign: 'right'
         }}
       >
-        <i
-          className='fas fa-user-circle'
-          onClick={pop}
-        />
+        <AccountCircleIcon />
         <div
           id='userMenu'
           style={{

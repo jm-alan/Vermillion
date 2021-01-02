@@ -48,41 +48,9 @@ input.title:focus::placeholder {
 
 button.submit.createPost {
     margin-top: 10px;
-    position: relative;
     width: 100px;
     height: 40px;
     justify-self: right;
-    font-weight: bold;
-    font-size: larger;
-    color: white;
-    background-color: #1b1f23;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px black;
-}
-
-button.submit.createPost:focus {
-    outline: none;
-}
-
-button.submit.createPost:active {
-    top: 2px;
-    left: 2px;
-    box-shadow: none;
-}
-
-#editorBar button {
-    font-size: large;
-    width: 33px;
-    background-color: black;
-    color: white;
-    border: none;
-    margin-right: 2px;
-    border-radius: 3px;
-}
-
-#editorBar button:focus {
-    outline: none;
 }
 
 img {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Button from '@material-ui/core/Button';
 
 import Title from './Title';
 import ButtonBar from './ButtonBar';
@@ -54,11 +55,13 @@ export default function RTE () {
         Preview:
       </div>
       <Preview contents={previewContents} />
-      <button
+      <Button
+        variant='contained'
+        color='primary'
         className='submit createPost'
         onClick={postSubmit}
       >Post
-      </button>
+      </Button>
     </div>
   );
 }
