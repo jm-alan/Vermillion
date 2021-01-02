@@ -9,7 +9,8 @@ router.get('/:follower', requireAuth, asyncHandler(async ({ params: { follower }
     const followers = await db.Follow.findAll({
       where: {
         follower
-      }
+      },
+      attributes: ['following']
     });
     return res.json({ followers });
   } catch (sqlerr) {
