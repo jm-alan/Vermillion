@@ -1,7 +1,5 @@
 'use strict';
 
-const { post, options } = require('../../routes/api/session');
-
 module.exports = (sequelize, DataTypes) => {
   const Post = sequelize.define('Post', {
     userId: DataTypes.INTEGER,
