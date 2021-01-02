@@ -1,39 +1,28 @@
-import { bold, italic, link, img, code, codeblock } from '../../utils/markMods';
+import { bold, italic, link, image, code, codeblock } from '../../utils/markMods';
 
-const buttonActions = {
-  bold,
-  italic,
-  link,
-  img,
-  code,
-  codeblock
-};
-
-const buttons = ['bold', 'italic', 'link', 'img', 'code', 'codeblock'];
-
-const icons = {
-  bold: <i className='fas fa-bold' />,
-  italic: <i className='fas fa-italic' />,
-  link: <i className='fas fa-link' />,
-  img: <i className='fas fa-image' />,
-  code: <i className='fas fa-terminal' />,
-  codeblock: <i className='fas fa-code' />
-};
+const buttons = [
+  { type: 'bold', title: 'Bold - Highlight text (optional), then click or CTRL+B', icon: <i className='fas fa-bold' />, action: bold },
+  { type: 'italic', title: 'Italic - Highlight text (optional), then click or CTRL+I', icon: <i className='fas fa-italic' />, action: italic },
+  { type: 'link', title: 'Link - Highlight link address (optional), then click or CTRL+ALT+L', icon: <i className='fas fa-link' />, action: link },
+  { type: 'image', title: 'Image - Click to upload, CTRL+ALT+I to add inline', icon: <i className='fas fa-image' />, action: image },
+  { type: 'code', title: 'Code - Highlight text (optional), then click or CTRL+ALT+C', icon: <i className='fas fa-terminal' />, action: code },
+  { type: 'codeblock', title: 'Codeblock - Highlight text (optional), then click or CTRL+ALT+SHIFT-C', icon: <i className='fas fa-code' />, action: codeblock }
+];
 
 export default function ButtonBar ({ updateRTEtext }) {
   return (
     <div id='editorBar'>
       {
-        buttons.map(action => (
+        buttons.map(button => (
           <button
-            key={action}
-            title={action}
+            key={button.type}
+            title={button.title}
             className='editorButton'
             onClick={() => {
-              buttonActions[action](updateRTEtext);
+              button.action(updateRTEtext);
             }}
           >
-            {icons[action]}
+            {button.icon}
           </button>
         ))
         }

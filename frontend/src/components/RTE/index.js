@@ -7,6 +7,7 @@ import BodyBox from './BodyBox';
 import Preview from './Preview';
 import debouncer from '../../utils/debouncer';
 import { CreatePost } from '../../store/post';
+import { keyControlCreator } from './keycontroller';
 
 const newDebouncer = debouncer();
 
@@ -17,6 +18,8 @@ export default function RTE () {
   const [RTEtext, updateRTEtext] = useState('');
   const [previewContents, updatePreviewContents] = useState('');
 
+  const keyController = keyControlCreator(updateRTEtext);
+
   const postSubmit = () => {
     dispatch(CreatePost({ title, postBody: previewContents }));
   };
@@ -24,6 +27,16 @@ export default function RTE () {
   useEffect(() => {
     newDebouncer(RTEtext, updatePreviewContents);
   }, [RTEtext]);
+
+  useEffect(() => {
+    const postBox = document.querySelector('textarea#postCreator');
+    if (postBox) {
+      postBox.addEventListener('keydown', keyController);
+      return () => {
+        postBox.removeEventListener('keydown', keyController);
+      };
+    }
+  }, [keyController]);
 
   return (
     <div className='RTE textEditor'>
