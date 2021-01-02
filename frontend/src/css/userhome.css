@@ -1,4 +1,5 @@
 #homeContainer {
+  margin-top: 4px;
   display: grid;
   width: 100%;
   height: 100%;
@@ -11,7 +12,7 @@
 }
 
 #homeContainer > div.RTE, div.post.card {
-  box-shadow: 0 0 0.5rem black;
+  box-shadow: 0 0 0.7rem rgb(20, 20, 20);
 }
 
 div.flowContainer {

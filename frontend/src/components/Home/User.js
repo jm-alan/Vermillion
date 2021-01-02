@@ -26,7 +26,6 @@ export default function UserHomePage () {
 
   return (
     <>
-      <Navigation user={user} />
       <div
         id='homeContainer'
       >

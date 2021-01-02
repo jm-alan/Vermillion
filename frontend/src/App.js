@@ -18,16 +18,15 @@ export default function App () {
 
   return (
     <>
+      <Navigation />
       <Switch>
         <Route exact path='/'>
           <Home />
         </Route>
         <Route path='/login'>
-          <Navigation />
           <LoginFormPage />
         </Route>
         <Route path='/signup'>
-          <Navigation />
           <SignupFormPage />
         </Route>
         <Route path='/:page'>

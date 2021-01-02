@@ -1,33 +1,47 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { LogOut } from '../../store/session';
 
-export default function ProfileButton ({ user }) {
+export default function ProfileButton () {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const user = useSelector(({ session: { user } }) => user);
 
   const [popped, togglePopped] = useState(false);
 
-  const toggle = () => togglePopped(popped => !popped);
+  const pop = () => togglePopped(true);
+  const unPop = () => togglePopped(false);
+
   const logout = () => dispatch(LogOut());
+
+  useEffect(() => {
+    if (popped) {
+      document.addEventListener('click', unPop);
+      return () => document.removeEventListener('click', unPop);
+    }
+  });
 
   return (
     <>
       <div
         className='profileButtonHolder profile'
-        style={{ textAlign: 'right' }}
+        style={{
+          transition: 'all .4s ease-in-out',
+          right: popped ? '-40px' : '10px',
+          textAlign: 'right'
+        }}
       >
         <i
           className='fas fa-user-circle'
-          onClick={toggle}
+          onClick={pop}
         />
         <div
+          id='userMenu'
           style={{
-            transition: 'all 0.4s',
-            zIndex: 5,
-            position: 'relative',
-            right: '40px',
-            top: popped ? '-45px' : '-100px'
+            right: popped ? '0px' : '-360px',
+            transition: 'all 0.4s'
           }}
         >
           <button
@@ -35,6 +49,26 @@ export default function ProfileButton ({ user }) {
             onClick={logout}
           >Log Out
           </button>
+          <div className='lamb' />
+          <button
+            className='button'
+            onClick={() => history.push(`/${user.username}`)}
+          >
+            My Blog
+          </button>
+          <div className='lamb' />
+          <button
+            className='button'
+            onClick={() => history.push('/')}
+          >
+            Home
+          </button>
+          <div className='lamb' />
+          <div className='lamb' />
+          <div className='lamb' />
+          <div className='lamb' />
+          <div className='lamb' />
+          <div className='lamb' />
         </div>
       </div>
     </>

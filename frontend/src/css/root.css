@@ -4,6 +4,7 @@
     height: 100%;
     width: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 html {
@@ -14,14 +15,7 @@ body {
     box-sizing: border-box;
     height: 100%;
     margin: 0;
-    padding: 10px;
     background-color: rgb(82, 94, 105);
     font-family: sans-serif;
     overflow: hidden;
-}
-
-@media screen and (max-width: 1020px) {
-    body {
-        padding: 10px 0px;
-    }
 }

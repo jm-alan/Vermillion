@@ -1,14 +1,32 @@
+div#userMenu {  
+    display: flex;
+    justify-content: space-around;
+    padding-top: 2px;
+    transition: all 0.4s;
+    position: absolute;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+div#userMenu > a {
+    height: 35px;
+}
+
 .navBar {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 10px;
-    height: 40px;
+    height: 36px;
+    background-color: rgb(82, 94, 105);
+    background-image: linear-gradient(rgb(92, 92, 92), rgb(92, 92, 92),rgb(92, 92, 92), rgb(82, 94, 105));
 }
 
 .navBar .profile {
     position: relative;
-    right: 5px;
 }
 
 .profileButtonHolder {
@@ -22,9 +40,9 @@
 .navBar button {
     font-weight: bold;
     position: relative;
-    box-shadow: 2px 2px 2px black;
+    box-shadow: 1px 1px 4px black;
     width: 90px;
-    height: 35px;
+    height: 30px;
     border: none;
     border-radius: 10px;
     color: white;
@@ -32,7 +50,7 @@
     background-color: #1B1F23;
 }
 
-.navHolder a.active {
+.navBar a.active, .navBar button.active {
     display: none;
 }
 
@@ -44,10 +62,4 @@
 
 .navBar button:focus {
     outline: none;
-}
-
-@media screen and (max-width: 1020px) {
-    .navBar {
-        margin: 0px 10px 10px 10px;
-    }
 }

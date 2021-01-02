@@ -1,10 +1,4 @@
-export default function textMod (symbol, updater) {
+export default function textMod (updater, startSymbol, endSymbol = null, noInput = 'Your text here') {
   const { selectionStart, selectionEnd } = document.getElementById('postCreator');
-
-  updater(old => [
-    old.substring(0, selectionStart),
-    `${symbol}${old.slice(selectionStart, selectionEnd) ||
-    'Your text here'}${symbol}`,
-    old.substring(selectionEnd, old.length)
-  ].join(''));
+  updater(old => `${old.substring(0, selectionStart)}${startSymbol}${old.slice(selectionStart, selectionEnd) || noInput}${endSymbol ?? startSymbol}${old.substring(selectionEnd, old.length)}`);
 }
