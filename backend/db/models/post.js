@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Post.associate = function (models) {
     Post.belongsTo(models.User, { foreignKey: 'userId' });
-    Post.belongsToMany(models.User, { through: models.Heart });
+    Post.belongsToMany(models.User, { through: models.Heart, foreignKey: 'postId', otherKey: 'userId' });
     [{ as: 'Reblogs', foreignKey: 'reblogOf' }, { as: 'Replies', foreignKey: 'replyTo' }]
       .forEach(fkeyMap => Post.hasMany(models.Post, fkeyMap));
     Post.hasMany(models.Tag, { foreignKey: 'postId' });
