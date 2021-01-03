@@ -17,8 +17,10 @@ export const CreatePost = content => async dispatch => {
   return newPostResponse;
 };
 
-export const EnumerateFlowContainer = () => async dispatch => {
-  const followedPostsResponse = await csrfetch('/api/posts/following');
+export const EnumerateFlowContainer = whereAmI => async dispatch => {
+  console.log(whereAmI);
+  const fetchUrl = whereAmI === '/' ? '/api/posts/following' : `/api/users/${whereAmI}/posts`;
+  const followedPostsResponse = await csrfetch(fetchUrl);
   console.log('Enumerated home post response:', followedPostsResponse);
   if (followedPostsResponse.data) dispatch(untoFollower(followedPostsResponse.data.posts));
 };

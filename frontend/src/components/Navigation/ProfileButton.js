@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { LogOut } from '../../store/session';
@@ -14,12 +15,6 @@ export default function ProfileButton () {
   const user = useSelector(({ session: { user } }) => user);
   const toggle = () => togglePopped(popped => !popped);
 
-  const goBlog = () => {
-    history.push(`/${user.username}`);
-  };
-  const goHome = () => {
-    history.push('/');
-  };
   const logout = () => {
     dispatch(LogOut());
   };
@@ -38,7 +33,7 @@ export default function ProfileButton () {
           style={{
             alignItems: 'center',
             justifyItems: 'left',
-            height: popped ? '90px' : '30px',
+            height: popped ? '92px' : '30px',
             width: popped ? '115px' : '30px',
             marginLeft: 'auto',
             marginRight: '5px',
@@ -48,30 +43,36 @@ export default function ProfileButton () {
           }}
         >
           <AccountCircleIcon id='navProfile' />
-          <Button
-            variant='contained'
+          <ButtonGroup
+            orientation='vertical'
+            variant='text'
             className={`${popped ? 'popped' : 'unpopped'}`}
-            disabled={!popped}
-            onClick={goHome}
+            color='default'
           >
-            Home
-          </Button>
-          <Button
-            variant='contained'
-            className={`${popped ? 'popped' : 'unpopped'}`}
-            disabled={!popped}
-            onClick={goBlog}
-          >
-            My Blog
-          </Button>
-          <Button
-            variant='contained'
-            className={`${popped ? 'popped' : 'unpopped'}`}
-            disabled={!popped}
-            onClick={logout}
-          >
-            Log Out
-          </Button>
+            <NavLink to='/'>
+              <Button
+                className={`${popped ? 'popped' : 'unpopped'}`}
+                disabled={!popped}
+              >
+                Home
+              </Button>
+            </NavLink>
+            <NavLink to={`/${user.username}`}>
+              <Button
+                className={`${popped ? 'popped' : 'unpopped'}`}
+                disabled={!popped}
+              >
+                My Blog
+              </Button>
+            </NavLink>
+            <Button
+              className={`${popped ? 'popped' : 'unpopped'}`}
+              disabled={!popped}
+              onClick={logout}
+            >
+              Log Out
+            </Button>
+          </ButtonGroup>
         </div>
       </div>
     </>

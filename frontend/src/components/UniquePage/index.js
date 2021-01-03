@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom';
 
+import FlowContainer from '../FlowContainer';
+
 export default function Page () {
   let { page } = useParams();
 
@@ -13,7 +15,7 @@ export default function Page () {
   } else {
     return (
       <>
-        <h1>One day this might be the page of user {page}!</h1>
+        <FlowContainer />
       </>
     );
   }

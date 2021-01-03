@@ -20,7 +20,7 @@
     padding: 0;
 }
 
-#userMenu button.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+#userMenu button.MuiButtonBase-root.MuiButton-root {
     transition: all 0.4s;
     height: 30px;
     font-weight: bolder;
@@ -28,9 +28,18 @@
     padding: 0px;
 }
 
-#userMenu button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.unpopped {
+#userMenu .MuiButtonGroup-groupedTextVertical:not(:last-child) {
+    border-bottom: 1px solid rgb(160, 160, 160);
+}
+
+#userMenu a.active {
+    display: unset;
+}
+
+#userMenu button.MuiButtonBase-root.MuiButton-root.unpopped {
     margin-left: 30px;
 }
+
 #navProfile {
     position: absolute;
     top: 5px;

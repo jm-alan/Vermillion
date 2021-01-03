@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
 import Post from './Post';
@@ -9,6 +10,8 @@ import { EnumerateFlowContainer } from '../../store/post';
 export default function FlowContainer () {
   const postList = useSelector(state => state.post ? state.post.list : null);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const whereAmI = location.pathname;
 
   const [pageErrors, updatePageErrors] = useState([]);
 
@@ -17,7 +20,9 @@ export default function FlowContainer () {
   }, []);
 
   useEffect(() => {
-    dispatch(EnumerateFlowContainer())
+    console.log('FlowContainer useEffect triggered');
+    updatePageErrors([]);
+    dispatch(EnumerateFlowContainer(whereAmI.toString()))
       .catch(err => updatePageErrors(errs => [...errs, err]));
   }, [dispatch]);
 
@@ -27,7 +32,7 @@ export default function FlowContainer () {
       {
         postList && postList.length
           ? postList.map(post => <Post content={post} key={nanoid()} />)
-          : <h1>Nothing to display here. Go follow some new people!</h1>
+          : <h1>Nothing to show here, sorry.</h1>
       }
     </div>
   );
