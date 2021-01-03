@@ -1,5 +1,7 @@
+import AppBar from '@material-ui/core/AppBar';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Button from '@material-ui/core/Button';
 
 import ProfileButton from './ProfileButton';
 
@@ -11,25 +13,24 @@ export default function Navigation () {
     ? null
     : !user
         ? (
-          <div className='navBar'>
+          <AppBar className='navBar' color='primary'>
             <div className='navHolder'>
               <NavLink to='/login' key='login'>
-                <button className='navbutton login'>
+                <Button className='navbutton login' variant='contained'>
                   Log In
-                </button>
+                </Button>
               </NavLink>
               <NavLink to='/signup' key='signup'>
-                <button className='navbutton signup'>
+                <Button className='navbutton signup' variant='contained'>
                   Sign Up
-                </button>
+                </Button>
               </NavLink>
             </div>
-          </div>
+          </AppBar>
           )
         : (
-          <div className='navBar'>
-            <div className='lamb' />
+          <AppBar className='navBar'>
             <ProfileButton />
-          </div>
+          </AppBar>
           );
 }

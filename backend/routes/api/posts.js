@@ -38,7 +38,7 @@ router.post('/',
           isReply: false,
           isReblog: false
         });
-        res.json({ newPost });
+        res.json(newPost);
       } catch (err) {
         if (process.env.NODE_ENV !== 'production') {
           console.warn('Sequelize error');
@@ -61,14 +61,14 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res)
         },
         include: {
           model: db.User,
-          attributes: [],
-          include: {
-            model: db.Post
-          }
+          attributes: []
+          // include: {
+          //   model: db.Post
+          // }
         }
       }
     });
-    console.log(followedPosts);
+    console.log(followedPosts.Follows);
   } catch (sqlerr) {
     console.warn('Sequelize error:', sqlerr);
   }

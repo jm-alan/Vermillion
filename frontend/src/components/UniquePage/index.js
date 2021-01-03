@@ -1,11 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
-import Navigation from '../Navigation';
 
 export default function Page () {
   let { page } = useParams();
-  const user = useSelector(({ session: user }) => user);
 
   page = page.toString();
   if (page.match(/^\d+$/)) {

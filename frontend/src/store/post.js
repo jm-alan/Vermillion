@@ -13,12 +13,24 @@ export const CreatePost = content => async dispatch => {
     method: 'POST',
     body: JSON.stringify({ content })
   });
-  if (newPostResponse) dispatch(renderPost(newPostResponse.data.newPost));
+  if (newPostResponse) dispatch(renderPost(newPostResponse.data));
   return newPostResponse;
 };
 
 export const EnumerateHome = () => async dispatch => {
   const followedPostsResponse = await csrfetch('/api/posts/following');
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('followedPostsResponse:', followedPostsResponse);
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('*********************************************');
+  console.log('*********************************************');
   if (followedPostsResponse.data) dispatch(untoFollower(followedPostsResponse.data.posts));
 };
 

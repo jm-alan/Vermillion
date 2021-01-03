@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
 
 import LoginFormPage from './components/LoginFormPage';
 import SignupFormPage from './components/SignupFormPage';
@@ -16,7 +18,7 @@ const masterTheme = createMuiTheme({
       main: '#01579b'
     },
     secondary: {
-      main: '#1a237e'
+      main: '#003066'
     }
   }
 });
@@ -32,20 +34,22 @@ export default function App () {
     <>
       <ThemeProvider theme={masterTheme}>
         <Navigation />
-        <Switch>
-          <Route exact path='/'>
-            <Home />
-          </Route>
-          <Route path='/login'>
-            <LoginFormPage />
-          </Route>
-          <Route path='/signup'>
-            <SignupFormPage />
-          </Route>
-          <Route path='/:page'>
-            <Page />
-          </Route>
-        </Switch>
+        <SimpleBar>
+          <Switch>
+            <Route exact path='/'>
+              <Home />
+            </Route>
+            <Route path='/login'>
+              <LoginFormPage />
+            </Route>
+            <Route path='/signup'>
+              <SignupFormPage />
+            </Route>
+            <Route path='/:page'>
+              <Page />
+            </Route>
+          </Switch>
+        </SimpleBar>
       </ThemeProvider>
     </>
   );

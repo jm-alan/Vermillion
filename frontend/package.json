@@ -18,7 +18,8 @@
     "react-scripts": "4.0.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "sanitize-html": "^2.3.0"
+    "sanitize-html": "^2.3.0",
+    "simplebar-react": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
