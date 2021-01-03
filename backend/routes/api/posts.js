@@ -51,18 +51,42 @@ router.post('/',
     }
   }));
 
-router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res) => {
+router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res, next) => {
   try {
-    const user = await db.User.findByPk(1, {
+    const posts = [];
+    db.User.findByPk(id, {
       include: {
-        model: db.Follow
+        model: db.User,
+        as: 'Following',
+        include: db.Post
       }
+    }).then(user => {
+      user.Following.forEach(follow => follow.Posts.forEach(post => posts.push(post)));
+      res.json({ posts });
     });
-    console.log(user.Follows);
   } catch (sqlerr) {
-    console.warn('Sequelize error:', sqlerr);
+    try {
+      db.ErrorLog.create({
+        location: 'backend/routes/api/posts',
+        during: 'GET /following',
+        body: sqlerr.toString()
+      });
+    } catch (writeErr) {
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error('FAILED TO WRITE ERROR TO DATABASE!');
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error('!--------------------------------!');
+      console.error(writeErr);
+    }
+    next(new Error('Sorry, something went wrong. Please refresh the page and try again.'));
   }
-  res.send();
 }));
 
 module.exports = router;

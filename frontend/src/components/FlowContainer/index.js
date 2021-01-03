@@ -1,30 +1,22 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
 
 import Post from './Post';
-import { EnumerateHome } from '../../store/post';
 
-export default function FlowContainer () {
+export default function FlowContainer ({ pageErrors, postList }) {
   const newPost = useSelector(state => state.post ? state.post.content : null);
-  const dashboardList = useSelector(state => state.post ? state.post.list : null);
-
-  const [pageErrors, updatePageErrors] = useState([]);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
   }, [newPost]);
 
-  useEffect(() => {
-    dispatch(EnumerateHome())
-      .catch(err => updatePageErrors(errs => [...errs, err]));
-  }, [dispatch]);
-
   return (
     <div className='flowContainer'>
-      {pageErrors.length ? <ul>{pageErrors.map(e => <li key={e}>{e.message}</li>)}</ul> : null}
+      {pageErrors.length ? <ul>{pageErrors.map(e => <li key={nanoid()}>{e.message}</li>)}</ul> : null}
       {
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <Post content={{ title: n, body: n }} key={n} />)
+        postList && postList.length
+          ? postList.map(post => <Post content={post} key={nanoid()} />)
+          : <h1>Nothing to display here. Go follow some new people!</h1>
       }
     </div>
   );
