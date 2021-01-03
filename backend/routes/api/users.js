@@ -13,4 +13,9 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
   return res.json({ user });
 }));
 
+router.get('/:userId(^\\D+\\w+)/posts', asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const user = await User.findByPk();
+}));
+
 module.exports = router;
