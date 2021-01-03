@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler');
 const clean = require('sanitize-html');
 
 const db = require('../../db/models');
+const follow = require('../../db/models/follow');
 const { requireAuth } = require('../../utils/auth');
 
 router.post('/',
@@ -52,23 +53,12 @@ router.post('/',
 
 router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res) => {
   try {
-    const followedPosts = await db.User.findByPk(id, {
-      attributes: [],
+    const user = await db.User.findByPk(1, {
       include: {
-        model: db.Follow,
-        where: {
-          follower: id
-        },
-        include: {
-          model: db.User,
-          attributes: []
-          // include: {
-          //   model: db.Post
-          // }
-        }
+        model: db.Follow
       }
     });
-    console.log(followedPosts.Follows);
+    console.log(user.Follows);
   } catch (sqlerr) {
     console.warn('Sequelize error:', sqlerr);
   }
