@@ -24,16 +24,17 @@ div.RTE {
 div.flowContainer {
   margin-top: 40px;
   box-sizing: border-box;
-  padding-bottom: 20px;
-  width: 100%;
+  padding: 0 10px;
   max-width: 1000px;
   justify-content: center;
 }
 
 div.post.card {
   margin: 0px auto 40px auto;
-  width: 100%;
   min-height: 200px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 div.post.card h1,

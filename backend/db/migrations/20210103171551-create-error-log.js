@@ -20,6 +20,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+      stack: {
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
+      sql: {
+        type: Sequelize.TEXT
+      },
+      sqlOriginal: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

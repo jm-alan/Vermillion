@@ -52,41 +52,44 @@ router.post('/',
   }));
 
 router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res, next) => {
-  try {
-    const posts = [];
-    db.User.findByPk(id, {
+  const posts = [];
+  db.User.findByPk(id, {
+    include: {
+      model: db.User,
+      as: 'Following',
       include: {
-        model: db.User,
-        as: 'Following',
-        include: db.Post
+        model: db.Post
       }
-    }).then(user => {
-      user.Following.forEach(follow => follow.Posts.forEach(post => posts.push(post)));
-      res.json({ posts });
-    });
-  } catch (sqlerr) {
-    try {
-      db.ErrorLog.create({
-        location: 'backend/routes/api/posts',
-        during: 'GET /following',
-        body: sqlerr.toString()
-      });
-    } catch (writeErr) {
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error('FAILED TO WRITE ERROR TO DATABASE!');
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error('!--------------------------------!');
-      console.error(writeErr);
     }
+  }).then(user => {
+    user.Following.forEach(follow => follow.Posts.forEach(post => posts.push(post)));
+    res.json({ posts });
+  }).catch(sqlerr => {
+    db.ErrorLog.create({
+      location: 'backend/routes/api/posts',
+      during: 'GET /following',
+      body: sqlerr.toString(),
+      stack: sqlerr.stack,
+      sql: sqlerr.sql,
+      sqlOriginal: sqlerr.original.toString()
+    })
+      .catch(fatalWriteErr => {
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        console.error('!--------------FAILED TO WRITE ERROR TO DATABASE!---------------!');
+        console.error(fatalWriteErr);
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        console.error('!---------------------------------------------------------------!');
+        next(new Error('Sorry, something went wrong. Please refresh the page and try again.'));
+      });
     next(new Error('Sorry, something went wrong. Please refresh the page and try again.'));
-  }
+  });
 }));
 
 module.exports = router;
