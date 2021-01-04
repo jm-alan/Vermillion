@@ -6,9 +6,11 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { ValidationError } = require('sequelize');
 const path = require('path');
+const asyncHandler = require('express-async-handler');
 
+const { requireAuth } = require('./utils/auth');
 const { environment } = require('./config');
-const { cookie } = require('express-validator');
+const db = require('./db/models');
 
 const isProduction = environment === 'production';
 
@@ -35,6 +37,24 @@ app.use(
 app.use(express.static(path.resolve('./public')));
 
 app.use(require('./routes'));
+
+app.get('/errOutput/:verbose', requireAuth, asyncHandler(async (req, res, next) => {
+  const { params: { verbose }, user: { id } } = req;
+  if ((await db.User.findByPk(id)).username !== 'admin') return next();
+  console.log(await db.ErrorLog.findAll({
+    attributes: verbose
+      ? ['body', 'stack']
+      : ['location', 'during', 'body']
+  }));
+  console.log(await db.User.findAll({
+    include: {
+      model: db.User,
+      as: 'Following'
+    }
+  }));
+  console.log(await db.Post.findAll());
+  next();
+}));
 
 app.use((_req, _res, next) => {
   const err = new Error('The requested resource couldn\'t be found.');

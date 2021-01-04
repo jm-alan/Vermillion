@@ -40,6 +40,19 @@ router.post('/',
         });
         res.json(newPost);
       } catch (err) {
+        try {
+          db.ErrorLog.create({
+            location: 'backend/routes/api/posts.js',
+            during: 'POST /posts',
+            body: err.toString(),
+            stack: err.stack,
+            sql: err.sql && err.sql.toString(),
+            sqlOriginal: err.original && err.original.toString()
+          });
+        } catch (fatalerr) {
+          console.error(fatalerr);
+          return next(Error('We\'re experiencing some problems right now. Please check back later.'));
+        }
         if (process.env.NODE_ENV !== 'production') {
           console.warn('Sequelize error');
           console.warn(err);

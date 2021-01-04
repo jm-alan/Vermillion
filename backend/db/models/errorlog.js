@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     sql: DataTypes.TEXT,
     sqlOriginal: DataTypes.TEXT
   }, {});
-  ErrorLog.associate = function(models) {
+  ErrorLog.associate = function (models) {
     // associations can be defined here
   };
   return ErrorLog;

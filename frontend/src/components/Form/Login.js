@@ -27,7 +27,7 @@ export default function Login () {
   else {
     return (
       <Form errors={errors} submit={submit}>
-        <Input className='input identification' type='text' value={identification} onChange={updateIdentification} />
+        <Input className='input identification' type='username' value={identification} onChange={updateIdentification} />
         <Input className='input password' type='password' value={password} onChange={updatePassword} />
         <button className='button login' type='submit'>
           Log In
