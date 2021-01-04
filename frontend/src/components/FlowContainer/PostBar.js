@@ -1,29 +1,34 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 
-import { FavPost } from '../../store/post';
-import csrfetch from '../../store/csrf';
+import { FavPost, EnumerateFavs } from '../../store/post';
 
-export default function PostBar ({ backendId, update }) {
+export default function PostBar ({ backendId }) {
   const dispatch = useDispatch();
+  const heartList = useSelector(({ post: { hearts } }) => hearts);
+  const update = useSelector(({ post: { update } }) => update);
 
   const [isHearted, setHearted] = useState(false);
   const favorite = () => {
-    console.log('Favorite button clicked');
     dispatch(FavPost(backendId));
+    dispatch(EnumerateFavs());
   };
 
   useEffect(() => {
-    const getHearts = async () => {
-      const data = (await csrfetch(`/api/users/hearts/${backendId}`)).data;
-      if (data.isHearted) setHearted(isHearted);
-    };
-    getHearts();
-  }, [update]);
+    if (heartList) {
+      heartList.forEach(heart => {
+        if (heart.postId === backendId) setHearted(true);
+      });
+    }
+  }, [heartList, backendId, update]);
+
+  useEffect(() => {
+    dispatch(EnumerateFavs());
+  }, [update, isHearted]);
 
   return (
     <ButtonGroup

@@ -31,7 +31,7 @@ export default function FlowContainer () {
       {pageErrors.length ? <ul>{pageErrors.map(e => <li key={nanoid()}>{e.toString()}</li>)}</ul> : null}
       {
         postList && postList.length
-          ? postList.map(post => <Post content={post} key={nanoid()} update={updateFlow} />).reverse()
+          ? postList.map(post => <Post content={post} key={nanoid()} />).reverse()
           : <h1>Nothing to show here, sorry.</h1>
       }
     </div>

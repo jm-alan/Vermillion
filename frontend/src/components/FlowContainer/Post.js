@@ -3,7 +3,7 @@ import CardContent from '@material-ui/core/CardContent';
 
 import PostBar from './PostBar';
 
-export default function Post ({ content, update }) {
+export default function Post ({ content }) {
   return (
     <Card className='post card'>
       <CardContent>
@@ -15,7 +15,7 @@ export default function Post ({ content, update }) {
         <hr />
         <div className='postBody' dangerouslySetInnerHTML={{ __html: content.body }} />
       </CardContent>
-      <PostBar backendId={content.id} update={update} />
+      <PostBar backendId={content.id} />
     </Card>
   );
 }

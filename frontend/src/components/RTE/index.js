@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 import Title from './Title';
@@ -7,7 +8,7 @@ import ButtonBar from './ButtonBar';
 import BodyBox from './BodyBox';
 import Preview from './Preview';
 import debouncer from '../../utils/debouncer';
-import { CreatePost } from '../../store/post';
+import { CreatePost, EnumerateFlowContainer } from '../../store/post';
 import { keyControlCreator } from './keycontroller';
 import Error from '../Form/Error';
 
@@ -15,6 +16,7 @@ const newDebouncer = debouncer();
 
 export default function RTE () {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const [title, updateTitle] = useState('');
   const [RTEtext, updateRTEtext] = useState('');
@@ -32,6 +34,7 @@ export default function RTE () {
         updatePreviewContents('');
       })
       .catch(err => updatePageErrors(() => err.data && err.data.message ? [err.data.message] : 'Something went wrong, please refresh the page and try again.'));
+    dispatch(EnumerateFlowContainer(location.pathname.toString()));
   };
 
   useEffect(() => {
