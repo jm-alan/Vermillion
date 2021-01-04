@@ -48,7 +48,7 @@ export default function ProfileButton () {
             className={`${popped ? 'popped' : 'unpopped'}`}
             color='default'
           >
-            <NavLink to='/'>
+            <NavLink to='/' style={{ pointerEvents: popped ? 'unset' : 'none' }}>
               <Button
                 className={`${popped ? 'popped' : 'unpopped'}`}
                 disabled={!popped}
@@ -56,7 +56,7 @@ export default function ProfileButton () {
                 Home
               </Button>
             </NavLink>
-            <NavLink to={`/${user.username}`}>
+            <NavLink to={`/${user.username}`} style={{ pointerEvents: popped ? 'unset' : 'none' }}>
               <Button
                 className={`${popped ? 'popped' : 'unpopped'}`}
                 disabled={!popped}
