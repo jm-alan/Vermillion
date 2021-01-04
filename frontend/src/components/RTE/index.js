@@ -9,6 +9,7 @@ import Preview from './Preview';
 import debouncer from '../../utils/debouncer';
 import { CreatePost } from '../../store/post';
 import { keyControlCreator } from './keycontroller';
+import Error from '../Form/Error';
 
 const newDebouncer = debouncer();
 
@@ -18,14 +19,19 @@ export default function RTE () {
   const [title, updateTitle] = useState('');
   const [RTEtext, updateRTEtext] = useState('');
   const [previewContents, updatePreviewContents] = useState('');
+  const [pageErrors, updatePageErrors] = useState([]);
 
   const keyController = keyControlCreator(updateRTEtext);
 
   const postSubmit = () => {
-    dispatch(CreatePost({ title, postBody: previewContents }));
-    updateTitle('');
-    updateRTEtext('');
-    updatePreviewContents('');
+    updatePageErrors([]);
+    dispatch(CreatePost({ title, postBody: previewContents }))
+      .then(() => {
+        updateTitle('');
+        updateRTEtext('');
+        updatePreviewContents('');
+      })
+      .catch(err => updatePageErrors(() => err.data && err.data.message ? [err.data.message] : 'Something went wrong, please refresh the page and try again.'));
   };
 
   useEffect(() => {
@@ -42,8 +48,13 @@ export default function RTE () {
     }
   }, [keyController]);
 
+  useEffect(() => {
+    updatePageErrors([]);
+  }, [RTEtext, title]);
+
   return (
     <div className='RTE textEditor'>
+      <Error errors={pageErrors} bindHeight='40px' />
       <div className='writeContainer container editbox'>
         <Title title={title} updateTitle={updateTitle} />
         <ButtonBar updateRTEtext={updateRTEtext} />

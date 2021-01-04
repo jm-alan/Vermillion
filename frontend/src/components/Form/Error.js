@@ -1,10 +1,12 @@
-export default function Error ({ errors }) {
+export default function Error ({ errors, bindHeight }) {
   return (
     <div
       className='errors'
       style={{
         visibility: errors.length ? 'visible' : 'hidden',
-        height: errors.length ? '10%' : 0,
+        height: errors.length
+          ? bindHeight ?? '10%'
+          : 0,
         overflow: 'hidden'
       }}
     >

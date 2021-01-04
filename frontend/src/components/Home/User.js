@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 
-import RichTextEditor from '../RTE';
+import Eddie from '../RTE';
 import FlowContainer from '../FlowContainer';
 import { dirtySetRTE, dirtySetAll } from '../../utils/dirtySetWidth';
 
@@ -20,7 +20,7 @@ export default function UserHomePage () {
       <Container
         id='homeContainer'
       >
-        <RichTextEditor />
+        <Eddie />
         <FlowContainer />
       </Container>
     </>

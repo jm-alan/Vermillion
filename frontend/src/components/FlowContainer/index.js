@@ -23,7 +23,7 @@ export default function FlowContainer () {
     console.log('FlowContainer useEffect triggered');
     updatePageErrors([]);
     dispatch(EnumerateFlowContainer(whereAmI.toString()))
-      .catch(err => updatePageErrors(errs => [...errs, err]));
+      .catch(err => updatePageErrors(() => [err]));
   }, [dispatch, whereAmI]);
 
   return (
