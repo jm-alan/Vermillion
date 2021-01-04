@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 
 import FlowContainer from '../FlowContainer';
+import NotFound from '../NotFound';
 
 export default function Page () {
   let { page } = useParams();
@@ -14,9 +15,11 @@ export default function Page () {
         ? (
           <h1>One day this will hold post #{page}!</h1>
           )
-        : (
-          <FlowContainer />
-          )}
+        : page.match(/^[a-zA-Z]+[a-zA-Z0-9-_]+$/)
+          ? (
+            <FlowContainer />
+            )
+          : <NotFound />}
     </Container>
   );
 }

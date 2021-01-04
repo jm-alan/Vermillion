@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         len: [3, 30],
         not (value) {
           if (value.match(/^[^a-zA-Z]/)) throw new Error('Username must start with a letter.');
-          if (value.match(/[^0-9a-zA-Z-_]/)) throw new Error('Username may only contain numbers 0-9, letters A-Z, under_score, or hy-phen');
+          if (value.match(/[^0-9a-zA-Z-_]/g)) throw new Error('Username may only contain numbers 0-9, letters A-Z, under_score, or hy-phen');
         },
         isNotEmail (value) {
           if (Validator.isEmail(value)) {
