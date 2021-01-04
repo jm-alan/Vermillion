@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     [{ as: 'Reblogs', foreignKey: 'reblogOf' }, { as: 'Replies', foreignKey: 'replyTo' }]
       .forEach(fkeyMap => Post.hasMany(models.Post, fkeyMap));
     Post.hasMany(models.Tag, { foreignKey: 'postId' });
+    Post.hasMany(models.Heart, { foreignKey: 'postId' });
   };
   return Post;
 };

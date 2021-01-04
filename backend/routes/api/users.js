@@ -2,11 +2,11 @@ const router = require('express').Router();
 const asyncHandler = require('express-async-handler');
 
 const { setTokenCookie } = require('../../utils/auth');
-const { User, Post } = require('../../db/models');
+const db = require('../../db/models');
 
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res) => {
   const { email, password, username } = req.body;
-  const user = await User.signup({ email, username, password });
+  const user = await db.User.signup({ email, username, password });
 
   await setTokenCookie(res, user);
 
@@ -15,11 +15,23 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
 
 router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
   const { username } = req.params;
-  const posts = (await User.findOne({
+  const posts = (await db.User.findOne({
     where: { username },
-    include: Post
+    include: db.Post
   })).Posts;
   res.json({ posts });
+}));
+
+router.get('/:userId/hearts/:postId', asyncHandler(async (req, res) => {
+  const { userId, postId } = req.params;
+  const hasHearted = await db.Heart.findOne({
+    where: {
+      userId,
+      postId
+    }
+  });
+  if (hasHearted) return res.json({ hearted: true });
+  return res.json({ hearted: false });
 }));
 
 module.exports = router;

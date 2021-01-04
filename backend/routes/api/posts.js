@@ -3,7 +3,6 @@ const asyncHandler = require('express-async-handler');
 const clean = require('sanitize-html');
 
 const db = require('../../db/models');
-const follow = require('../../db/models/follow');
 const { requireAuth } = require('../../utils/auth');
 
 router.post('/',
@@ -21,12 +20,12 @@ router.post('/',
         title = title || null;
         postBody = postBody || null;
         if (!(title ?? false)) {
-          const err = new Error('Title cannot be blank');
+          const err = new Error('Title cannot be empty.');
           err.internalValidate = true;
           throw err;
         }
         if (!(postBody ?? false)) {
-          const err = new Error('Body cannot be blank');
+          const err = new Error('Body cannot be empty.');
           err.internalValidate = true;
           throw err;
         }
@@ -62,6 +61,7 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
       }
     }
   }).then(user => {
+    console.log(user);
     user.Following.forEach(follow => follow.Posts.forEach(post => posts.push(post)));
     res.json({ posts });
   }).catch(sqlerr => {
@@ -71,7 +71,7 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
       body: sqlerr.toString(),
       stack: sqlerr.stack,
       sql: sqlerr.sql,
-      sqlOriginal: sqlerr.original.toString()
+      sqlOriginal: sqlerr.original
     })
       .catch(fatalWriteErr => {
         console.error('!---------------------------------------------------------------!');
@@ -90,6 +90,25 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
       });
     next(new Error('Sorry, something went wrong. Please refresh the page and try again.'));
   });
+}));
+
+router.post('/:postId(\\d+)/hearts', requireAuth, asyncHandler(async (req, res, next) => {
+  const { postId } = req.params;
+  const { user: { id: userId } } = req;
+  try {
+    const newHeart = await db.Heart.findOrCreate({
+      where: {
+        postId,
+        userId
+      }
+    });
+    if (!newHeart[1]) await newHeart[0].destroy();
+    res.json({ success: true });
+  } catch (err) {
+    console.log('Create heart failed.');
+    console.error(err);
+  }
+  res.send();
 }));
 
 module.exports = router;
