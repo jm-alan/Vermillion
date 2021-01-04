@@ -23,6 +23,9 @@ export default function RTE () {
 
   const postSubmit = () => {
     dispatch(CreatePost({ title, postBody: previewContents }));
+    updateTitle('');
+    updateRTEtext('');
+    updatePreviewContents('');
   };
 
   useEffect(() => {
