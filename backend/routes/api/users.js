@@ -14,9 +14,11 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
 }));
 
 router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
-  console.log('Users hit');
-  const { userId } = req.params;
-  User.findByPk(userId, { include: Post });
+  const { username } = req.params;
+  User.findOne({
+    where: { username },
+    include: Post
+  });
   res.send();
 }));
 
