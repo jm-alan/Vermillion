@@ -15,11 +15,11 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
 
 router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
   const { username } = req.params;
-  User.findOne({
+  const posts = (await User.findOne({
     where: { username },
     include: Post
-  });
-  res.send();
+  })).Posts;
+  res.json({ posts });
 }));
 
 module.exports = router;
