@@ -2,7 +2,7 @@ const router = require('express').Router();
 const asyncHandler = require('express-async-handler');
 
 const { setTokenCookie } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Post } = require('../../db/models');
 
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res) => {
   const { email, password, username } = req.body;
@@ -13,9 +13,11 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
   return res.json({ user });
 }));
 
-router.get('/:userId(^\\D+\\w+)/posts', asyncHandler(async (req, res) => {
+router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
+  console.log('Users hit');
   const { userId } = req.params;
-  const user = await User.findByPk();
+  User.findByPk(userId, { include: Post });
+  res.send();
 }));
 
 module.exports = router;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -9,7 +9,6 @@ import { LogOut } from '../../store/session';
 
 export default function ProfileButton () {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [popped, togglePopped] = useState(false);
 
   const user = useSelector(({ session: { user } }) => user);

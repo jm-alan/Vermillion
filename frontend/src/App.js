@@ -5,8 +5,8 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
-import LoginFormPage from './components/LoginFormPage';
-import SignupFormPage from './components/SignupFormPage';
+import LoginFormPage from './components/Form/Login';
+import SignupFormPage from './components/Form/Signup';
 import Navigation from './components/Navigation';
 import Home from './components/Home';
 import Page from './components/UniquePage';

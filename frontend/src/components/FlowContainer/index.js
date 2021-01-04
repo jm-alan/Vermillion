@@ -17,14 +17,14 @@ export default function FlowContainer () {
 
   useEffect(() => {
     dirtySetFlowContainer();
-  }, []);
+  }, [postList]);
 
   useEffect(() => {
     console.log('FlowContainer useEffect triggered');
     updatePageErrors([]);
     dispatch(EnumerateFlowContainer(whereAmI.toString()))
       .catch(err => updatePageErrors(errs => [...errs, err]));
-  }, [dispatch]);
+  }, [dispatch, whereAmI]);
 
   return (
     <div className='flowContainer'>
