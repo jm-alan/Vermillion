@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler');
 
 const { setTokenCookie } = require('../../utils/auth');
 const db = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res) => {
   const { email, password, username } = req.body;
@@ -22,13 +23,11 @@ router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
   res.json({ posts });
 }));
 
-router.get('/:userId/hearts/:postId', asyncHandler(async (req, res) => {
-  const { userId, postId } = req.params;
+router.get('/hearts/:postId', requireAuth, asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  const { user: { id: userId } } = req;
   const hasHearted = await db.Heart.findOne({
-    where: {
-      userId,
-      postId
-    }
+    where: { userId, postId }
   });
   if (hasHearted) return res.json({ hearted: true });
   return res.json({ hearted: false });

@@ -1,22 +1,29 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 
 import { FavPost } from '../../store/post';
+import csrfetch from '../../store/csrf';
 
-export default function PostBar ({ backendId }) {
+export default function PostBar ({ backendId, update }) {
   const dispatch = useDispatch();
-  const runningPost = useSelector(({ post: { updatePost } }) => updatePost);
-  const isThisPost = runningPost === backendId;
 
+  const [isHearted, setHearted] = useState(false);
   const favorite = () => {
     console.log('Favorite button clicked');
     dispatch(FavPost(backendId));
   };
 
-  useSelector(() => {}, [isThisPost]);
+  useEffect(() => {
+    const getHearts = async () => {
+      const data = (await csrfetch(`/api/users/hearts/${backendId}`)).data;
+      if (data.isHearted) setHearted(isHearted);
+    };
+    getHearts();
+  }, [update]);
 
   return (
     <ButtonGroup
@@ -24,7 +31,12 @@ export default function PostBar ({ backendId }) {
       className='postButtons'
     >
       <Button onClick={favorite}>
-        <FavoriteIcon className='heartButton' />
+        <FavoriteIcon
+          className='heartButton'
+          style={{
+            color: isHearted ? 'red' : 'unset'
+          }}
+        />
       </Button>
       <Button>
         <AutorenewIcon />

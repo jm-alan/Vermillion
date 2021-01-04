@@ -52,44 +52,14 @@ router.post('/',
 
 router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res, next) => {
   const posts = [];
-  db.User.findByPk(id, {
+  (await db.User.findByPk(id, {
     include: {
       model: db.User,
       as: 'Following',
-      include: {
-        model: db.Post
-      }
+      include: db.Post
     }
-  }).then(user => {
-    console.log(user);
-    user.Following.forEach(follow => follow.Posts.forEach(post => posts.push(post)));
-    res.json({ posts });
-  }).catch(sqlerr => {
-    db.ErrorLog.create({
-      location: 'backend/routes/api/posts',
-      during: 'GET /following',
-      body: sqlerr.toString(),
-      stack: sqlerr.stack,
-      sql: sqlerr.sql,
-      sqlOriginal: sqlerr.original
-    })
-      .catch(fatalWriteErr => {
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        console.error('!--------------FAILED TO WRITE ERROR TO DATABASE!---------------!');
-        console.error(fatalWriteErr);
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        console.error('!---------------------------------------------------------------!');
-        next(new Error('Sorry, something went wrong. Please refresh the page and try again.'));
-      });
-    next(new Error('Sorry, something went wrong. Please refresh the page and try again.'));
-  });
+  })).Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
+  res.json({ posts });
 }));
 
 router.post('/:postId(\\d+)/hearts', requireAuth, asyncHandler(async (req, res, next) => {
