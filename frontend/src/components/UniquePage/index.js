@@ -10,16 +10,17 @@ export default function Page () {
   page = page.toString();
 
   return (
-    <Container>
-      {(page.match(/^\d+$/))
+    (page.match(/^\d+$/))
+      ? (
+        <h1>One day this will hold post #{page}!</h1>
+        )
+      : page.match(/^[a-zA-Z]+[a-zA-Z0-9-_]+$/)
         ? (
-          <h1>One day this will hold post #{page}!</h1>
-          )
-        : page.match(/^[a-zA-Z]+[a-zA-Z0-9-_]+$/)
-          ? (
+          <Container>
             <FlowContainer />
-            )
-          : <NotFound />}
-    </Container>
+          </Container>
+
+          )
+        : <NotFound />
   );
 }

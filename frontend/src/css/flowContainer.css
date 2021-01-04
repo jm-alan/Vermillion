@@ -1,5 +1,5 @@
 div.flowContainer {
-    margin-top: 40px;
+    margin: 40px auto 0px auto;
     box-sizing: border-box;
     padding: 0 10px;
     max-width: 1000px;
