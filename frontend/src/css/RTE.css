@@ -94,3 +94,33 @@ img {
 #postCreator:focus::placeholder {
     color: transparent;
 }
+
+.buttonContainer {
+    width: 265px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: height 0.3s;
+    justify-content: space-between;
+}
+
+.buttonContainer.unexpanded {
+    height: 26px;
+}
+
+.buttonContainer.expanded {
+    height: 104px;
+}
+
+.editorBar {
+    height: 26px;
+}
+
+.editorButton {
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+#editExpand {
+    height: 12px;
+}

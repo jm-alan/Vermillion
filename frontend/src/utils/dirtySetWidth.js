@@ -1,15 +1,19 @@
 import * as SizeControl from './magicSizeMachine';
 
+let outerBounds;
+let innerBounds;
+
 export const dirtySetRTE = () => {
-  const prettyBounds = `${Math.min(document.documentElement.clientWidth - 48, 1000)}px`;
-  SizeControl.setWidth(document.querySelector('div.RTE'), prettyBounds);
-  SizeControl.setWidth(document.querySelector('#preview'), `${SizeControl.getWidth(document.querySelector('div.RTE')) - 20}px`);
+  outerBounds = Math.max(Math.min(document.documentElement.clientWidth - 48, 1000), 285);
+  innerBounds = outerBounds - 20;
+  SizeControl.setWidth(document.querySelector('div.RTE'), `${outerBounds}px`);
+  SizeControl.setWidth(document.querySelector('#preview'), `${innerBounds}px`);
 };
 
 export const dirtySetFlowContainer = () => {
   document.querySelectorAll('div.post.card')
     .forEach(post => {
-      SizeControl.setWidth(post, `${Math.min(document.documentElement.clientWidth - 68, 980)}px`);
+      SizeControl.setWidth(post, `${innerBounds}px`);
     });
 };
 
