@@ -5,7 +5,7 @@ div.flowContainer {
     max-width: 1000px;
     justify-content: center;
 }
-  
+
 div.post.card {
     display: flex;
     flex-direction: column;
@@ -15,7 +15,16 @@ div.post.card {
     word-wrap: break-word;
     white-space: pre-wrap;
 }
-  
+
+div.post.card a:link {
+    text-decoration: none;
+    color: black;
+}
+
+div.post.card a.active {
+    color: red;
+}
+
 div.post.card h1,
 div.post.card h2,
 div.post.card h3,
@@ -24,7 +33,7 @@ div.post.card h5,
 div.post.card h6 {
 margin: 0px;
 }
-  
+
 pre {
     background-color: steelblue;
     color: white;
@@ -49,7 +58,8 @@ code {
 }
 
 .postButtons {
-    justify-content: flex-end;
-    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 10px;
     text-align: right;
 }

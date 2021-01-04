@@ -17,7 +17,6 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
 router.get('/hearts', requireAuth, asyncHandler(async (req, res) => {
   const { user: { id: userId } } = req;
   const hearts = await db.Heart.findAll({ where: { userId }, attributes: ['postId'] });
-  console.log(hearts);
   res.json({ hearts });
 }));
 
@@ -25,7 +24,10 @@ router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
   const { username } = req.params;
   const posts = (await db.User.findOne({
     where: { username },
-    include: db.Post
+    include: {
+      model: db.Post,
+      include: db.User
+    }
   })).Posts;
   res.json({ posts });
 }));

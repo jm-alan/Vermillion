@@ -4,8 +4,13 @@ export default function AnonHomePage () {
   return (
     <div className='anonNavHolder'>
       <div className='anonTitle'>
+        <span
+          className='anonHomeSpan'
+          title='Yes this is comic sans on purpose, @ me'
+        >Vermillion
+        </span>
         <h1>
-          Welcome to <span style={{ color: 'red' }}>Vermillion</span>, your new favorite place to get lost for an hour or three.
+          Welcome to your new favorite place to get lost for an hour or three.
         </h1>
         <h1>
           If you'd like to check out the content shared by our fantastic creators, please either

@@ -69,7 +69,10 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
     include: {
       model: db.User,
       as: 'Following',
-      include: db.Post
+      include: {
+        model: db.Post,
+        include: db.User
+      }
     }
   })).Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
   res.json({ posts });
