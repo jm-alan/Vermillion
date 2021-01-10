@@ -21,6 +21,10 @@ div.post.card a:link {
     color: black;
 }
 
+div.post.card a:visited {
+    color: unset;
+}
+
 div.post.card a.active {
     color: red;
 }
@@ -61,5 +65,5 @@ code {
     display: flex;
     justify-content: space-between;
     padding: 0px 10px;
-    text-align: right;
+    align-items: center;
 }

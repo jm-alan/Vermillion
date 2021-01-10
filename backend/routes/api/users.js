@@ -18,8 +18,9 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
     }
     const user = await db.User.signup({ email, username, password });
     await user.addFollower(user.id);
+    await user.addFollower(1);
 
-    await setTokenCookie(res, user);
+    setTokenCookie(res, user);
 
     return res.json({ user });
   } catch (err) {
@@ -30,8 +31,8 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
           during: 'POST/',
           body: err.toString(),
           stack: err.stack,
-          sql: err.sql ?? 'None',
-          sqlOriginal: err.original ?? 'None'
+          sql: err.sql && err.sql.toString(),
+          sqlOriginal: err.original && err.original.toString()
         });
         const didMatch = err.toString().match(/SequelizeValidationError: Validation error:/);
         const errToThrow = didMatch
@@ -72,15 +73,5 @@ router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
   })).Posts;
   res.json({ posts });
 }));
-
-// router.get('/hearts/:postId', requireAuth, asyncHandler(async (req, res) => {
-//   const { postId } = req.params;
-//   const { user: { id: userId } } = req;
-//   const hasHearted = await db.Heart.findOne({
-//     where: { userId, postId }
-//   });
-//   if (hasHearted) return res.json({ hearted: true });
-//   return res.json({ hearted: false });
-// }));
 
 module.exports = router;
