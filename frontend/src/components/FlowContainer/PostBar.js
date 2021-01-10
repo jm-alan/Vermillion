@@ -29,7 +29,7 @@ export default function PostBar ({ backendId, username }) {
 
   useEffect(() => {
     dispatch(EnumerateFavs());
-  }, [update, isHearted]);
+  }, [update, isHearted, dispatch]);
 
   return (
     <div
