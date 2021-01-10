@@ -8,8 +8,16 @@ const { requireAuth } = require('../../utils/auth');
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res, next) => {
   try {
     const { email, password, username } = req.body;
+    const testUser = await db.User.findOne({
+      where: { username }
+    });
+    if (testUser) {
+      const error = new Error('Sorry, that username is already taken.');
+      error.status = 400;
+      return next(error);
+    }
     const user = await db.User.signup({ email, username, password });
-    await user.addFollow(user.id);
+    await user.addFollower(user.id);
 
     await setTokenCookie(res, user);
 
@@ -25,9 +33,12 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
           sql: err.sql ?? 'None',
           sqlOriginal: err.original ?? 'None'
         });
-        const error = new Error('Sorry something went wrong when trying to create your account. Please refresh the page and try again.');
-        error.status = 500;
-        res.json({ error });
+        const didMatch = err.toString().match(/SequelizeValidationError: Validation error:/);
+        const errToThrow = didMatch
+          ? err
+          : new Error('Sorry, something went wrong when trying to create your account. Please refresh the page and try again.');
+        errToThrow.status = didMatch ? 400 : 500;
+        next(errToThrow);
       } catch (fatalWriteErr) {
         console.error('Fatal error when attempting to write error to Sequelize database.');
         console.error('App terminating to prevent potential catastrophic UX failure.');
@@ -38,8 +49,9 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
       console.error('--------------------------------------------------------');
       console.error('----------Error occurred during POST/api/users----------');
       console.error(err);
+      console.error('Short:', err.toString());
+      return next(err);
     }
-    res.send();
   }
 }));
 
