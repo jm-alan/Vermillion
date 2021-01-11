@@ -15,7 +15,13 @@ export default function Post ({ content }) {
         <hr />
         <div className='postBody' dangerouslySetInnerHTML={{ __html: content.body }} />
       </CardContent>
-      <PostBar backendId={content.id} username={content.User.username} />
+      <PostBar
+        backendId={content.id}
+        createdAt={content.createdAt}
+        updatedAt={content.updatedAt}
+        username={content.User.username}
+        isHearted={content.isHearted}
+      />
     </Card>
   );
 }

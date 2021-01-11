@@ -13,8 +13,70 @@ const sanitizeOptions = {
   allowedTags: [...sanitize.defaults.allowedTags, 'img']
 };
 
-router.post('/', requireAuth, asyncHandler(async ({ user, body }, res, next) => {
-  if (!body || !body.content) {
+router.put('/:postId(\\d+)', requireAuth, asyncHandler(async ({ user: { id: userId }, body: { type }, params: { postId } }, res, next) => {
+  try {
+    const post = await db.Post.findByPk(postId, { where: { userId } });
+    if (!post) return res.json({ result: null });
+    const heart = await db.Heart.findOne({ where: { postId, userId } });
+    switch (type) {
+      case 'like':
+        if (!heart) {
+          await db.Heart.create({ userId, postId });
+          post.increment('hearts');
+          return res.json({ result: 'like' });
+        } else {
+          await heart.destroy();
+          post.decrement('hearts');
+          return res.json({ result: 'unlike' });
+        }
+    }
+  } catch {}
+}));
+
+router.patch('/:postId(\\d+)', requireAuth, asyncHandler(async ({ user: { id: userId }, params: { postId }, body: { component, payload } }, res, next) => {
+  try {
+    if (!postId || !userId) return res.json({ success: false });
+    const post = await db.Post.findByPk(postId, { where: { userId } });
+    if (!post || !component || !payload) return res.json({ success: false });
+    await post.update({
+      [component.toString()]: sanitize(payload.toString())
+    });
+  } catch (err) {
+    if (process.env.NODE_ENV === 'production') {
+      try {
+        await db.ErrorLog.create({
+          location: 'backend/routes/api/posts.js',
+          during: `PATCH/posts/${postId} of ${component.toString()} with ${payload.toString()}`,
+          body: err.toString(),
+          stack: err.stack,
+          sql: err.sql && err.sql.toString(),
+          sqlOriginal: err.original && err.original.toString()
+        });
+        const errOut = new Error('Sorry, something went wrong. Please refresh the page and try again.');
+        errOut.status = 400;
+        return next(errOut);
+      } catch (fatalWriteErr) {
+        console.error('Fatal database error occurred when attempting to write to error log.');
+        console.error('---------------------------Original error:---------------------------');
+        console.error(err);
+        console.error('------------------------ErrorLog write error:------------------------');
+        console.error(fatalWriteErr);
+        console.error('Original short:', err.toString());
+        console.error('Fatal short:', fatalWriteErr.toString());
+        const errOut = new Error('Sorry, we\'re experiencing some problems right now. Please come back later.');
+        errOut.status = 500;
+        return next(errOut);
+      }
+    } else {
+      console.error(err);
+      console.error('Short:', err.toString());
+      return next(err);
+    }
+  }
+}));
+
+router.post('/', requireAuth, asyncHandler(async ({ user: { id: userId }, body: { content } }, res, next) => {
+  if (!content) {
     const err = new Error('Bad post POST');
     err.status = 401;
     err.title = 'Invalid request body or post content.';
@@ -22,9 +84,10 @@ router.post('/', requireAuth, asyncHandler(async ({ user, body }, res, next) => 
     return next(err);
   } else {
     try {
-      let { title, postBody } = body.content;
+      let { title, postBody } = content;
       title = title || null;
       postBody = postBody || null;
+      userId = userId ?? 0;
       if (!(title ?? false)) {
         const err = new Error('Title cannot be empty.');
         err.internalValidate = true;
@@ -36,9 +99,9 @@ router.post('/', requireAuth, asyncHandler(async ({ user, body }, res, next) => 
         throw err;
       }
       const newPost = await db.Post.create({
-        title,
+        title: sanitize(title),
         body: sanitize(postBody, sanitizeOptions),
-        userId: user.id ?? 0,
+        userId,
         hearts: 0,
         reblogs: 0,
         isReply: false,
@@ -46,19 +109,20 @@ router.post('/', requireAuth, asyncHandler(async ({ user, body }, res, next) => 
       });
       res.json(newPost);
     } catch (err) {
-      if (err.internalValidate || err.toString.match(/SequelizeValidationError: Validation error:/)) return next(err);
+      if (err.internalValidate || err.toString().match(/SequelizeValidationError: Validation error:/)) return next(err);
       if (process.env.NODE_ENV === 'production') {
         try {
           db.ErrorLog.create({
             location: 'backend/routes/api/posts.js',
-            during: 'POST /posts',
+            during: 'POST/posts',
             body: err.toString(),
             stack: err.stack,
             sql: err.sql && err.sql.toString(),
             sqlOriginal: err.original && err.original.toString()
           });
-        } catch (fatalerr) {
-          console.error(fatalerr);
+        } catch (fatalWriteErr) {
+          console.error(fatalWriteErr);
+          console.error('Short:', fatalWriteErr.toString());
           const errOut = new Error('We\'re experiencing some problems right now. Please check back later.');
           return next(errOut);
         }
@@ -74,7 +138,7 @@ router.post('/', requireAuth, asyncHandler(async ({ user, body }, res, next) => 
 
 router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res, next) => {
   try {
-    const posts = [];
+    let posts = [];
     (await db.User.findByPk(id, {
       include: {
         model: db.User,
@@ -85,6 +149,18 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
         }
       }
     })).Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
+    posts.forEach(post => {
+      post.isHearted = false;
+      post.Hearts.forEach(heart => {
+        console.log('Post isHearted', post.isHearted);
+        console.log('Heart on post', post.id, { userId: heart.userId });
+        console.log(heart.userId === id);
+        if (heart.userId === id) {
+          post.isHearted = true;
+        }
+      });
+    });
+    posts = posts.map(({ id, userId, User, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User, createdAt, updatedAt, isHearted, title, body }));
     res.json({ posts });
   } catch (err) {
     if (process.env.NODE_ENV === 'production') {
@@ -97,8 +173,9 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
           sql: err.sql && err.sql.toString(),
           sqlOriginal: err.original && err.original.toString()
         });
-      } catch (fatalerr) {
-        console.error(fatalerr);
+      } catch (fatalWriteErr) {
+        console.error(fatalWriteErr);
+        console.error('Short:', fatalWriteErr.toString());
         const errOut = new Error('We\'re experiencing some problems right now. Please check back later.');
         return next(errOut);
       }
