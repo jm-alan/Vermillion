@@ -19,6 +19,7 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
     const user = await db.User.signup({ email, username, password });
     await user.addFollower(user.id);
     await user.addFollower(1);
+    await user.addFollowing(1);
 
     setTokenCookie(res, user);
 
