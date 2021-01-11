@@ -96,6 +96,7 @@ export default function ButtonBar ({ updateRTEtext }) {
           <Button
             color='primary'
             className='editorButton'
+            title='Table - coming soon!'
           >
             <i className='fas fa-table' />
           </Button>

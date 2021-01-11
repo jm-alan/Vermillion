@@ -1,54 +1,78 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 
-import { FavPost, EnumerateFavs } from '../../store/post';
+import { TouchPost } from '../../store/post';
 
-export default function PostBar ({ backendId, username }) {
+export default function PostBar ({ username, backendId, isHearted, createdAt, updatedAt }) {
+  createdAt = new Date(createdAt);
+  updatedAt = new Date(updatedAt);
   const dispatch = useDispatch();
-  const heartList = useSelector(({ post: { hearts } }) => hearts);
-  const update = useSelector(({ post: { update } }) => update);
+  const [hearted, setHearted] = useState(isHearted);
 
-  const [isHearted, setHearted] = useState(false);
-  const favorite = () => {
-    dispatch(FavPost(backendId));
-    dispatch(EnumerateFavs());
-  };
-
-  useEffect(() => {
-    if (heartList) {
-      heartList.forEach(heart => {
-        if (heart.postId === backendId) setHearted(true);
+  const heart = () => {
+    dispatch(TouchPost(backendId, 'like'))
+      .then(res => {
+        switch (res) {
+          case 'like':
+            setHearted(true);
+            break;
+          case 'unlike':
+            setHearted(false);
+            break;
+          default:
+            setHearted(false);
+        }
       });
-    }
-  }, [heartList, backendId, update]);
-
-  useEffect(() => {
-    dispatch(EnumerateFavs());
-  }, [update, isHearted]);
+  };
 
   return (
     <div
       className='postButtons'
     >
-      <NavLink to={`/${username}`}><h4>{username}</h4></NavLink>
+      <div className='identContainer'>
+        <NavLink to={`/${username}`}>
+          <h4>
+            {username}
+          </h4>
+        </NavLink>
+        {' | '}
+        <NavLink
+          to={`/${backendId}`}
+          className='timeStamp'
+        >
+          <h6>
+            Posted: {createdAt.toLocaleString({}, { dateStyle: 'short', timeStyle: 'short' }).replace(/,/, ' |')}
+          </h6>
+          {/* {createdAt.toString() === updatedAt.toString()
+            ? null
+            : (
+              <h6>
+                Last edited: {updatedAt.toLocaleString({}, { dateStyle: 'short', timeStyle: 'short' }).replace(/,/, ' |')}
+              </h6>)} */}
+        </NavLink>
+      </div>
       <ButtonGroup
         variant='text'
       >
-        <Button onClick={favorite}>
+        <Button
+          className='heartButton'
+          onClick={heart}
+        >
           <FavoriteIcon
-            className='heartButton'
-            style={{
-              color: isHearted ? 'red' : 'unset'
-            }}
+            className={`heartIcon ${hearted ? 'hearted' : 'unhearted'}`}
           />
         </Button>
-        <Button>
-          <AutorenewIcon />
+        <Button
+          className='reblogButton'
+        >
+          <AutorenewIcon
+            className='reblogIcon'
+          />
         </Button>
       </ButtonGroup>
     </div>

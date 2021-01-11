@@ -1,20 +1,10 @@
 import csrfetch from './csrf';
 
 const CREATE = 'post/CREATE';
-
 const ENUMERATE = 'post/ENUMERATE';
 
-const FAVORITE = 'post/FAVORITE';
-
-const FAVS = 'post/FAVS';
-
 const renderPost = () => ({ type: CREATE });
-
 const untoFollower = list => ({ type: ENUMERATE, list });
-
-const untoUser = hearts => ({ type: FAVS, hearts });
-
-const favorite = () => ({ type: FAVORITE });
 
 export const CreatePost = content => async dispatch => {
   const newPostResponse = await csrfetch('/api/posts', {
@@ -30,22 +20,27 @@ export const EnumerateFlowContainer = whereAmI => async dispatch => {
   if (followedPostsResponse.data) dispatch(untoFollower(followedPostsResponse.data.posts));
 };
 
-export const FavPost = postId => async dispatch => {
-  const favoriteResponse = await csrfetch(`/api/posts/${postId}/hearts`, { method: 'POST' });
-  if (favoriteResponse.data && favoriteResponse.data.success) dispatch(favorite(postId));
+export const UpdatePost = (postId, component, payload) => async dispatch => {
+  const updatePostResponse = await csrfetch(`/api/posts/${postId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ component, payload })
+  });
+  if (updatePostResponse.data && updatePostResponse.data.success) return { postId, component, payload };
 };
 
-export const EnumerateFavs = () => async dispatch => {
-  const heartsResponse = await csrfetch('/api/users/hearts');
-  if (heartsResponse.data) dispatch(untoUser(heartsResponse.data.hearts));
+export const TouchPost = (postId, type) => async () => {
+  const { data } = await csrfetch(`/api/posts/${postId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ type })
+  });
+  const { result } = data ?? { result: false };
+  if (data && result) return result;
 };
 
-export default function postReducer (state = { content: null, list: null }, { type, list, hearts, updatePost }) {
+export default function postReducer (state = { content: null, list: null }, { type, list, postId, component, payload, result }) {
   switch (type) {
     case CREATE: return { ...state, updateFlow: true };
-    case FAVORITE: return { ...state, updatePost };
     case ENUMERATE: return { ...state, list };
-    case FAVS: return { ...state, hearts };
     default: return state;
   }
 }

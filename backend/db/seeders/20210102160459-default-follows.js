@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('Follows', [
       { follower: 1, following: 1 },
       { follower: 1, following: 2 },
-      { follower: 1, following: 3 }
+      { follower: 2, following: 2 }
     ]);
   },
 

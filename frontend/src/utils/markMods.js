@@ -5,7 +5,7 @@ export const italic = updater => textMod(updater, '*');
 export const code = updater => textMod(updater, '`');
 export const codeblock = updater => textMod(updater, '```\n', '\n```');
 export const link = updater => textMod(updater, '[display text](', ')', 'https://www.example.com/');
-export const image = updater => textMod(updater, '![display text](', ')', 'https://www.example.com/image.jpg');
+export const image = updater => textMod(updater, '![text to display if image fails to load](', ')', 'https://www.example.com/image.jpg');
 export const H1 = updater => textMod(updater, '# ', '\n', 'Heading 1');
 export const H2 = updater => textMod(updater, '## ', '\n', 'Heading 2');
 export const H3 = updater => textMod(updater, '### ', '\n', 'Heading 3');
