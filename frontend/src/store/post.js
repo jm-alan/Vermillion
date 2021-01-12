@@ -20,7 +20,7 @@ export const EnumerateFlowContainer = whereAmI => async dispatch => {
   if (followedPostsResponse.data) dispatch(untoFollower(followedPostsResponse.data.posts));
 };
 
-export const UpdatePost = (postId, component, payload) => async dispatch => {
+export const UpdatePost = (postId, component, payload) => async () => {
   const updatePostResponse = await csrfetch(`/api/posts/${postId}`, {
     method: 'PATCH',
     body: JSON.stringify({ component, payload })
