@@ -2,6 +2,8 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
@@ -13,6 +15,26 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
   updatedAt = new Date(updatedAt);
   const dispatch = useDispatch();
   const [hearted, setHearted] = useState(isHearted);
+  const [hoverMenu, popHoverMenu] = useState(false);
+  const [mooring, setMooring] = useState(null);
+
+  let hangTimer;
+
+  const menuStart = ({ target }) => {
+    hangTimer = setTimeout(() => {
+      setMooring(target);
+      popHoverMenu(true);
+    }, 750);
+  };
+
+  const menuClose = () => {
+    popHoverMenu(false);
+    setMooring(null);
+  };
+
+  const lowerMouseOut = () => {
+    if (!hoverMenu && hangTimer) clearTimeout(hangTimer);
+  };
 
   const heart = () => {
     dispatch(TouchPost(backendId, 'like'))
@@ -36,24 +58,38 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
     >
       <div className='identContainer'>
         <NavLink to={`/${username}`}>
-          <h4>
+          <h4
+            onMouseEnter={menuStart}
+            onMouseLeave={lowerMouseOut}
+          >
             {username}
           </h4>
         </NavLink>
+        <Menu
+          id='follow-hover'
+          anchorEl={mooring}
+          keepMounted
+          open={hoverMenu}
+        >
+          <MenuItem
+            onClick={menuClose}
+            onMouseLeave={menuClose}
+          >
+            Follow
+          </MenuItem>
+        </Menu>
         {' | '}
         <NavLink
           to={`/${backendId}`}
           className='timeStamp'
         >
-          <h6>
-            Posted: {createdAt.toLocaleString({}, { dateStyle: 'short', timeStyle: 'short' }).replace(/,/, ' |')}
+          <h6
+            style={{
+              paddingTop: '3px'
+            }}
+          >
+            {createdAt.toLocaleString({}, { dateStyle: 'short', timeStyle: 'short' }).replace(/,/, ' |')}
           </h6>
-          {/* {createdAt.toString() === updatedAt.toString()
-            ? null
-            : (
-              <h6>
-                Last edited: {updatedAt.toLocaleString({}, { dateStyle: 'short', timeStyle: 'short' }).replace(/,/, ' |')}
-              </h6>)} */}
         </NavLink>
       </div>
       <ButtonGroup

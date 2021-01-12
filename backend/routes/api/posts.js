@@ -152,15 +152,13 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
     posts.forEach(post => {
       post.isHearted = false;
       post.Hearts.forEach(heart => {
-        console.log('Post isHearted', post.isHearted);
-        console.log('Heart on post', post.id, { userId: heart.userId });
-        console.log(heart.userId === id);
         if (heart.userId === id) {
           post.isHearted = true;
         }
       });
     });
     posts = posts.map(({ id, userId, User, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User, createdAt, updatedAt, isHearted, title, body }));
+    posts.sort(({ createdAt: a }, { createdAt: b }) => Date.parse(a) - Date.parse(b));
     res.json({ posts });
   } catch (err) {
     if (process.env.NODE_ENV === 'production') {

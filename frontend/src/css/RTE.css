@@ -100,7 +100,7 @@ img {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: height 0.3s;
+    transition: height 0.3s, width 0.2s;
     justify-content: space-between;
 }
 
@@ -123,4 +123,10 @@ img {
 
 #editExpand {
     height: 12px;
+}
+
+@media screen and (max-width: 451px) {
+    div.buttonContainer {
+        width: 100%;
+    }
 }

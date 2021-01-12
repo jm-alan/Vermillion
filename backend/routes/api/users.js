@@ -75,4 +75,15 @@ router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
   res.json({ posts });
 }));
 
+router.get('/:username(\\D+\\w+)/followers', requireAuth, asyncHandler(async ({ user: { id: userId }, params: { username } }, res, next) => {
+  try {
+    const user = await db.User.findOne({ where: { username } });
+    if (!user) return res.json({ success: false });
+    await user.addFollower(userId);
+    res.json({ success: true });
+  } catch (err) {
+
+  }
+}));
+
 module.exports = router;

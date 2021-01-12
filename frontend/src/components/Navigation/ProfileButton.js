@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
@@ -13,10 +13,27 @@ export default function ProfileButton () {
 
   const user = useSelector(({ session: { user } }) => user);
   const toggle = () => togglePopped(popped => !popped);
+  const unPop = () => {
+    togglePopped(false);
+  };
 
   const logout = () => {
     dispatch(LogOut());
   };
+
+  useEffect(() => {
+    if (popped) {
+      setTimeout(() => {
+        document.addEventListener('click', unPop);
+      }, 100);
+    }
+    if (!popped) {
+      document.removeEventListener('click', unPop);
+    }
+    return () => {
+      document.removeEventListener('click', unPop);
+    };
+  }, [popped]);
 
   return (
     <>
