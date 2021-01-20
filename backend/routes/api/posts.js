@@ -5,6 +5,16 @@ const sanitize = require('sanitize-html');
 const db = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
+Array.prototype.asyncForEach = async function (cb) {
+  try {
+    for (let i = 0; i < this.length; i++) {
+      await cb(this[i], i, this)
+    }
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 const sanitizeOptions = {
   allowedAttributes: {
     ...sanitize.defaults.allowedAttributes,
@@ -149,7 +159,8 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res,
         }
       }
     })).Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
-    posts.forEach(post => {
+    await posts.asyncForEach(async post => {
+      console.log(post);
       post.isHearted = false;
       post.Hearts.forEach(heart => {
         if (heart.userId === id) {
