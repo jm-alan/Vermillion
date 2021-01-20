@@ -58,20 +58,17 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
 }));
 
 router.get('/hearts', requireAuth, asyncHandler(async (req, res) => {
-  const { user: { id: userId } } = req;
-  const hearts = await db.Heart.findAll({ where: { userId }, attributes: ['postId'] });
+  const { user: { id } } = req;
+  const user = await db.User.findByPk(id);
+  const hearts = await user.getHearts({ attributes: ['postId'] });
   res.json({ hearts });
 }));
 
 router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
   const { username } = req.params;
-  const posts = (await db.User.findOne({
-    where: { username },
-    include: {
-      model: db.Post,
-      include: db.User
-    }
-  })).Posts;
+  const user = await db.User.findOne({ where: { username } });
+  if (!user) return res.json({ posts: null });
+  const posts = await user.getPosts({ include: db.User });
   res.json({ posts });
 }));
 
@@ -84,6 +81,13 @@ router.get('/:username(\\D+\\w+)/followers', requireAuth, asyncHandler(async ({ 
   } catch (err) {
 
   }
+}));
+
+router.get('/:username(\\D+\\w+)', asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  const user = await db.User.findOne({ where: { username } });
+  if (!user) return res.json({ user: null });
+  return res.json({ user: user.toSafeObject() });
 }));
 
 module.exports = router;
