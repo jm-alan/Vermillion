@@ -8,7 +8,7 @@ const { requireAuth } = require('../../utils/auth');
 Array.prototype.asyncForEach = async function (cb) {
   try {
     for (let i = 0; i < this.length; i++) {
-      await cb(this[i], i, this)
+      if (this[i]) await cb(this[i], i, this);
     }
   } catch (err) {
     throw new Error(err);
