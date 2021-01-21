@@ -1,9 +1,8 @@
 const router = require('express').Router();
 const asyncHandler = require('express-async-handler');
 
-const { setTokenCookie } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const db = require('../../db/models');
-const { requireAuth } = require('../../utils/auth');
 
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res, next) => {
   try {
@@ -64,11 +63,21 @@ router.get('/hearts', requireAuth, asyncHandler(async (req, res) => {
   res.json({ hearts });
 }));
 
-router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  const user = await db.User.findOne({ where: { username } });
-  if (!user) return res.json({ posts: null });
-  const posts = await user.getPosts({ include: db.User });
+router.get('/:username(\\D+\\w+)/posts', restoreUser, asyncHandler(async (req, res) => {
+  const { params: { username }, user } = req;
+  const loggedInUser = user && await db.User.findByPk(user.id);
+  const blogUser = await db.User.findOne({
+    where: { username },
+    include: db.Post
+  });
+  if (!blogUser) return res.json({ posts: null });
+  let posts = blogUser.Posts;
+  loggedInUser && await posts.asyncForEach(async post => {
+    post.isHearted = await loggedInUser.hasHeartedPost(post);
+  });
+  // This map is necessary to normalize data on each "post" object, to retain access to the "isHearted" value.
+  posts = posts.map(({ id, userId, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User: user, createdAt, updatedAt, isHearted, title, body }));
+  posts.sort(({ createdAt: a }, { createdAt: b }) => Date.parse(a) - Date.parse(b));
   res.json({ posts });
 }));
 

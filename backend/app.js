@@ -14,6 +14,10 @@ const db = require('./db/models');
 
 const isProduction = environment === 'production';
 
+Array.prototype.asyncForEach = async function (cb) {
+  for (let i = 0; i < this.length; i++) await cb(this[i], i, this);
+};
+
 const app = express();
 app.use(morgan('dev'));
 app.use(cookieParser());

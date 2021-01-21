@@ -4,7 +4,6 @@ import CardContent from '@material-ui/core/CardContent';
 import PostBar from './PostBar';
 
 export default function Post ({ content }) {
-  console.log(content.isHearted);
   return (
     <Card className='post card'>
       <CardContent>

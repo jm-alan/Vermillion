@@ -79,10 +79,6 @@ module.exports = (sequelize, DataTypes) => {
     ].forEach(map => User.belongsToMany(...map));
   };
 
-  User.getCurrentUserById = async function (id) {
-    return await User.scope('currentUser').findByPk(id);
-  };
-
   User.login = async function ({ identification, password }) {
     const { Op } = require('sequelize');
     const user = await User.scope('loginUser').findOne({
@@ -114,6 +110,10 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.validatePassword = function (password) {
     return bcrypt.compareSync(password, this.hashedPassword.toString());
+  };
+
+  User.prototype.isFollowing = async function (userObj) {
+    return await this.hasFollowing(userObj);
   };
 
   return User;

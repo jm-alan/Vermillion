@@ -24,7 +24,7 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
     hangTimer = setTimeout(() => {
       setMooring(target);
       popHoverMenu(true);
-    }, 750);
+    }, 1000);
   };
 
   const menuClose = () => {

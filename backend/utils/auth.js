@@ -23,14 +23,17 @@ const setTokenCookie = (res, user) => {
 
 const restoreUser = (req, res, next) => {
   const { token } = req.cookies;
+  console.log('Restore user line 26');
 
   return jwt.verify(token, secret, null, async (err, jwtPayload) => {
-    if (err) return next();
+    if (err) return ((req.user = null) || true) && next();
 
     try {
+      console.log('Resore user inside TRY block line 33');
       const { id } = jwtPayload.data;
       req.user = await User.scope('currentUser').findByPk(id);
     } catch (e) {
+      console.log('Restore user TRY FAIL catch:', e);
       res.clearCookie('token');
       return next();
     }

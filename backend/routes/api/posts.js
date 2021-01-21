@@ -5,16 +5,6 @@ const sanitize = require('sanitize-html');
 const db = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
-Array.prototype.asyncForEach = async function (cb) {
-  try {
-    for (let i = 0; i < this.length; i++) {
-      if (this[i]) await cb(this[i], i, this);
-    }
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
 const sanitizeOptions = {
   allowedAttributes: {
     ...sanitize.defaults.allowedAttributes,
@@ -117,9 +107,10 @@ router.post('/', requireAuth, asyncHandler(async ({ user: { id: userId }, body: 
         isReply: false,
         isReblog: false
       });
-      res.json(newPost);
+      return res.json(newPost);
     } catch (err) {
-      if (err.internalValidate || err.toString().match(/SequelizeValidationError: Validation error:/)) return next(err);
+      if (err.internalValidate ||
+        err.toString().match(/SequelizeValidationError: Validation error:/)) return next(err);
       if (process.env.NODE_ENV === 'production') {
         try {
           db.ErrorLog.create({
@@ -133,7 +124,8 @@ router.post('/', requireAuth, asyncHandler(async ({ user: { id: userId }, body: 
         } catch (fatalWriteErr) {
           console.error(fatalWriteErr);
           console.error('Short:', fatalWriteErr.toString());
-          const errOut = new Error('We\'re experiencing some problems right now. Please check back later.');
+          const errOut = new Error('Sorry, we\'re experiencing some problems right now. Please come back later.');
+          errOut.status = 500;
           return next(errOut);
         }
       } else {
@@ -146,28 +138,25 @@ router.post('/', requireAuth, asyncHandler(async ({ user: { id: userId }, body: 
   }
 }));
 
-router.get('/following', requireAuth, asyncHandler(async ({ user: { id } }, res, next) => {
+router.get('/following', requireAuth, asyncHandler(async ({ user: { id: userId } }, res, next) => {
   try {
     let posts = [];
-    (await db.User.findByPk(id, {
+    const user = await db.User.findByPk(userId, {
       include: {
         model: db.User,
         as: 'Following',
         include: {
           model: db.Post,
-          include: [db.User, db.Heart]
+          include: db.User
         }
       }
-    })).Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
-    await posts.asyncForEach(async post => {
-      console.log(post);
-      post.isHearted = false;
-      post.Hearts.forEach(heart => {
-        if (heart.userId === id) {
-          post.isHearted = true;
-        }
-      });
     });
+    await user.addFollower(user);
+    user.Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
+    await posts.asyncForEach(async post => {
+      post.isHearted = await user.hasHeartedPost(post);
+    });
+    // This map is necessary to normalize data on each "post" object, to retain access to the "isHearted" value.
     posts = posts.map(({ id, userId, User, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User, createdAt, updatedAt, isHearted, title, body }));
     posts.sort(({ createdAt: a }, { createdAt: b }) => Date.parse(a) - Date.parse(b));
     res.json({ posts });
