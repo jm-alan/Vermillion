@@ -13,7 +13,12 @@ const sanitizeOptions = {
   allowedTags: [...sanitize.defaults.allowedTags, 'img']
 };
 
-router.put('/:postId(\\d+)', requireAuth, asyncHandler(async ({ user: { id: userId }, body: { type }, params: { postId } }, res, next) => {
+router.put('/:postId(\\d+)', requireAuth, asyncHandler(async (req, res) => {
+  const {
+    user: { id: userId },
+    body: { type },
+    params: { postId }
+  } = req;
   try {
     const post = await db.Post.findByPk(postId, { where: { userId } });
     if (!post) return res.json({ result: null });
@@ -33,7 +38,12 @@ router.put('/:postId(\\d+)', requireAuth, asyncHandler(async ({ user: { id: user
   } catch {}
 }));
 
-router.patch('/:postId(\\d+)', requireAuth, asyncHandler(async ({ user: { id: userId }, params: { postId }, body: { component, payload } }, res, next) => {
+router.patch('/:postId(\\d+)', requireAuth, asyncHandler(async (req, res, next) => {
+  const {
+    user: { id: userId },
+    params: { postId },
+    body: { component, payload }
+  } = req;
   try {
     if (!postId || !userId) return res.json({ success: false });
     const post = await db.Post.findByPk(postId, { where: { userId } });
@@ -75,7 +85,8 @@ router.patch('/:postId(\\d+)', requireAuth, asyncHandler(async ({ user: { id: us
   }
 }));
 
-router.post('/', requireAuth, asyncHandler(async ({ user: { id: userId }, body: { content } }, res, next) => {
+router.post('/', requireAuth, asyncHandler(async (req, res, next) => {
+  const { user: { id: userId }, body: { content } } = req;
   if (!content) {
     const err = new Error('Bad post POST');
     err.status = 401;
@@ -138,7 +149,8 @@ router.post('/', requireAuth, asyncHandler(async ({ user: { id: userId }, body: 
   }
 }));
 
-router.get('/following', requireAuth, asyncHandler(async ({ user: { id: userId } }, res, next) => {
+router.get('/following', requireAuth, asyncHandler(async (req, res, next) => {
+  const { user: { id: userId } } = req;
   try {
     let posts = [];
     const user = await db.User.findByPk(userId, {
@@ -151,7 +163,6 @@ router.get('/following', requireAuth, asyncHandler(async ({ user: { id: userId }
         }
       }
     });
-    await user.addFollower(user);
     user.Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
     await posts.asyncForEach(async post => {
       post.isHearted = await user.hasHeartedPost(post);

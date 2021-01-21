@@ -6,7 +6,7 @@ const db = require('../../db/models');
 
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res, next) => {
   try {
-    const { email, password, username } = req.body;
+    const { body: { email, password, username } } = req;
     const testUser = await db.User.findOne({
       where: { username }
     });
@@ -81,12 +81,20 @@ router.get('/:username(\\D+\\w+)/posts', restoreUser, asyncHandler(async (req, r
   res.json({ posts });
 }));
 
-router.get('/:username(\\D+\\w+)/followers', requireAuth, asyncHandler(async ({ user: { id: userId }, params: { username } }, res, next) => {
+router.post('/:username(\\D+\\w+)/followers', requireAuth, asyncHandler(async (req, res) => {
+  const { user: { id: userId }, params: { username } } = req;
   try {
-    const user = await db.User.findOne({ where: { username } });
-    if (!user) return res.json({ success: false });
-    await user.addFollower(userId);
-    res.json({ success: true });
+    const following = await db.User.findOne({ where: { username } });
+    const follower = await db.User.findByPk(userId);
+    if (!following) return res.json({ success: false });
+    if (!(await following.hasFollower(follower))) {
+      following.addFollower(follower);
+      return res.json({ success: true, result: 'follow' });
+    } else if (await following.hasFollower(follower)) {
+      following.removeFollower(follower);
+      return res.json({ success: true, result: 'unfollow' });
+    }
+    return res.json({ success: false });
   } catch (err) {
 
   }
