@@ -98,7 +98,6 @@ router.post('/', requireAuth, asyncHandler(async (req, res, next) => {
       let { title, postBody } = content;
       title = title || null;
       postBody = postBody || null;
-      userId = userId ?? 0;
       if (!(title ?? false)) {
         const err = new Error('Title cannot be empty.');
         err.internalValidate = true;
@@ -109,9 +108,11 @@ router.post('/', requireAuth, asyncHandler(async (req, res, next) => {
         err.internalValidate = true;
         throw err;
       }
+      title = sanitize(title);
+      const body = sanitize(postBody, sanitizeOptions);
       const newPost = await db.Post.create({
-        title: sanitize(title),
-        body: sanitize(postBody, sanitizeOptions),
+        title,
+        body,
         userId,
         hearts: 0,
         reblogs: 0,
