@@ -116,5 +116,17 @@ module.exports = (sequelize, DataTypes) => {
     return await this.hasFollowing(userObj);
   };
 
+  User.prototype.heartPost = async function (postObj) {
+    await postObj.increment('hearts');
+    await this.addHeartedPost(postObj);
+    return { result: 'like' };
+  };
+
+  User.prototype.unheartPost = async function (postObj) {
+    await postObj.decrement('hearts');
+    await this.removeHeartedPost(postObj);
+    return { result: 'unlike' };
+  };
+
   return User;
 };
