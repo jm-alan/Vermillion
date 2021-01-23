@@ -142,27 +142,25 @@ router.post('/', requireAuth, asyncHandler(async (req, res, next) => {
   }
 }));
 
-router.get('/following', requireAuth, asyncHandler(async (req, res, next) => {
+router.get('/me/following', requireAuth, asyncHandler(async (req, res, next) => {
   const { user: { id: userId } } = req;
   try {
     let posts = [];
     const user = await db.User.findByPk(userId, {
-      include: {
-        model: db.User,
-        as: 'Following',
-        include: {
-          model: db.Post,
-          include: db.User
-        }
-      }
+      include: { model: db.User, as: 'Following' }
     });
-    user.Following.forEach(f => f.Posts.forEach(p => posts.push(p)));
+    await user.Following.asyncForEach(async follower => {
+      const followerPosts = await follower.getPosts({
+        include: db.User,
+        order: [['createdAt', 'ASC']]
+      });
+      followerPosts.forEach(post => posts.push(post));
+    });
     await posts.asyncForEach(async post => {
       post.isHearted = await user.hasHeartedPost(post);
     });
     // This map is necessary to normalize data on each "post" object, to retain access to the "isHearted" value.
-    posts = posts.map(({ id, userId, User, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User, createdAt, updatedAt, isHearted, title, body }));
-    posts.sort(({ createdAt: a }, { createdAt: b }) => Date.parse(a) - Date.parse(b));
+    posts = posts.map(post => ({ ...post.dataValues, isHearted: post.isHearted }));
     res.json({ posts });
   } catch (err) {
     if (process.env.NODE_ENV === 'production') {

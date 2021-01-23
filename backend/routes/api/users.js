@@ -66,18 +66,14 @@ router.get('/hearts', requireAuth, asyncHandler(async (req, res) => {
 router.get('/:username(\\D+\\w+)/posts', restoreUser, asyncHandler(async (req, res) => {
   const { params: { username }, user } = req;
   const loggedInUser = user && await db.User.findByPk(user.id);
-  const blogUser = await db.User.findOne({
-    where: { username },
-    include: db.Post
-  });
+  const blogUser = await db.User.findOne({ where: { username } });
   if (!blogUser) return res.json({ posts: null });
-  let posts = blogUser.Posts;
+  let posts = await blogUser.getPosts({ order: [['createdAt', 'ASC']] });
   loggedInUser && await posts.asyncForEach(async post => {
     post.isHearted = await loggedInUser.hasHeartedPost(post);
   });
   // This map is necessary to normalize data on each "post" object, to retain access to the "isHearted" value.
-  posts = posts.map(({ id, userId, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User: user, createdAt, updatedAt, isHearted, title, body }));
-  posts.sort(({ createdAt: a }, { createdAt: b }) => Date.parse(a) - Date.parse(b));
+  posts = posts.map(({ id, userId, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User: blogUser, createdAt, updatedAt, isHearted, title, body }));
   res.json({ posts });
 }));
 
@@ -100,8 +96,19 @@ router.post('/:username(\\D+\\w+)/followers', requireAuth, asyncHandler(async (r
   }
 }));
 
+router.get('/me/isFollowing/:username(\\D+\\w+)', requireAuth, asyncHandler(async (req, res) => {
+  const {
+    params: { username },
+    user: { id: userId }
+  } = req;
+  const follower = await db.User.findByPk(userId);
+  const following = await db.User.findOne({ where: { username } });
+  const isFollowing = await follower.isFollowing(following);
+  return res.json({ isFollowing });
+}));
+
 router.get('/:username(\\D+\\w+)', asyncHandler(async (req, res) => {
-  const { username } = req.params;
+  const { params: { username } } = req;
   const user = await db.User.findOne({ where: { username } });
   if (!user) return res.json({ user: null });
   return res.json({ user: user.toSafeObject() });
