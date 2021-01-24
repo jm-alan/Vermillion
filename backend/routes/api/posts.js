@@ -104,7 +104,7 @@ router.post('/', requireAuth, asyncHandler(async (req, res, next) => {
       }
       title = sanitize(title);
       const body = sanitize(postBody, sanitizeOptions);
-      const newPost = await user.createPost({
+      let newPost = await user.createPost({
         title,
         body,
         hearts: 0,
@@ -112,6 +112,7 @@ router.post('/', requireAuth, asyncHandler(async (req, res, next) => {
         isReply: false,
         isReblog: false
       });
+      newPost = { ...newPost.dataValues, User: user };
       return res.json(newPost);
     } catch (err) {
       if (err.internalValidate || err.toString().match(/SequelizeValidationError: Validation error:/)) return next(err);

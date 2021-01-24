@@ -7,9 +7,7 @@ const db = require('../../db/models');
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res, next) => {
   try {
     const { body: { email, password, username } } = req;
-    const testUser = await db.User.findOne({
-      where: { username }
-    });
+    const testUser = await db.User.findOne({ where: { username } });
     if (testUser) {
       const error = new Error('Sorry, that username is already taken.');
       error.status = 400;
