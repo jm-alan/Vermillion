@@ -25,7 +25,7 @@ const restoreUser = (req, res, next) => {
   const { token } = req.cookies;
 
   return jwt.verify(token, secret, null, async (err, jwtPayload) => {
-    if (err) return next();
+    if (err) return ((req.user = null) || true) && next();
 
     try {
       const { id } = jwtPayload.data;
@@ -43,7 +43,7 @@ const restoreUser = (req, res, next) => {
 
 const requireAuth = [
   restoreUser,
-  (req, res, next) => {
+  (req, _res, next) => {
     if (req.user) return next();
 
     const err = new Error('Unauthorized');

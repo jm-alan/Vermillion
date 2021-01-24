@@ -33,7 +33,7 @@ export default function RTE () {
         updateRTEtext('');
         updatePreviewContents('');
       })
-      .catch(err => updatePageErrors(() => err.data && err.data.message ? [err.data.message] : 'Something went wrong, please refresh the page and try again.'));
+      .catch(err => updatePageErrors(() => err.data && err.data.message ? [err.data.message] : ['Something went wrong, please refresh the page and try again.']));
     dispatch(EnumerateFlowContainer(location.pathname.toString()));
   };
 

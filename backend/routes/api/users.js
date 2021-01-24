@@ -1,16 +1,13 @@
 const router = require('express').Router();
 const asyncHandler = require('express-async-handler');
 
-const { setTokenCookie } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const db = require('../../db/models');
-const { requireAuth } = require('../../utils/auth');
 
 router.post('/', require('../../utils/validation').validateSignup, asyncHandler(async (req, res, next) => {
   try {
-    const { email, password, username } = req.body;
-    const testUser = await db.User.findOne({
-      where: { username }
-    });
+    const { body: { email, password, username } } = req;
+    const testUser = await db.User.findOne({ where: { username } });
     if (testUser) {
       const error = new Error('Sorry, that username is already taken.');
       error.status = 400;
@@ -58,32 +55,61 @@ router.post('/', require('../../utils/validation').validateSignup, asyncHandler(
 }));
 
 router.get('/hearts', requireAuth, asyncHandler(async (req, res) => {
-  const { user: { id: userId } } = req;
-  const hearts = await db.Heart.findAll({ where: { userId }, attributes: ['postId'] });
+  const { user: { id } } = req;
+  const user = await db.User.findByPk(id);
+  const hearts = await user.getHearts({ attributes: ['postId'] });
   res.json({ hearts });
 }));
 
-router.get('/:username(\\D+\\w+)/posts', asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  const posts = (await db.User.findOne({
-    where: { username },
-    include: {
-      model: db.Post,
-      include: db.User
-    }
-  })).Posts;
+router.get('/:username(\\D+\\w+)/posts', restoreUser, asyncHandler(async (req, res) => {
+  const { params: { username }, user } = req;
+  const loggedInUser = user && await db.User.findByPk(user.id);
+  const blogUser = await db.User.findOne({ where: { username } });
+  if (!blogUser) return res.json({ posts: null });
+  let posts = await blogUser.getPosts({ order: [['createdAt', 'ASC']] });
+  loggedInUser && await posts.asyncForEach(async post => {
+    post.isHearted = await loggedInUser.hasHeartedPost(post);
+  });
+  // This map is necessary to normalize data on each "post" object, to retain access to the "isHearted" value.
+  posts = posts.map(({ id, userId, createdAt, updatedAt, isHearted, title, body }) => ({ id, userId, User: blogUser, createdAt, updatedAt, isHearted, title, body }));
   res.json({ posts });
 }));
 
-router.get('/:username(\\D+\\w+)/followers', requireAuth, asyncHandler(async ({ user: { id: userId }, params: { username } }, res, next) => {
+router.post('/:username(\\D+\\w+)/followers', requireAuth, asyncHandler(async (req, res) => {
+  const { user: { id: userId }, params: { username } } = req;
   try {
-    const user = await db.User.findOne({ where: { username } });
-    if (!user) return res.json({ success: false });
-    await user.addFollower(userId);
-    res.json({ success: true });
+    const following = await db.User.findOne({ where: { username } });
+    const follower = await db.User.findByPk(userId);
+    if (!following) return res.json({ success: false });
+    if (!(await following.hasFollower(follower))) {
+      following.addFollower(follower);
+      return res.json({ success: true, result: 'follow' });
+    } else if (await following.hasFollower(follower)) {
+      following.removeFollower(follower);
+      return res.json({ success: true, result: 'unfollow' });
+    }
+    return res.json({ success: false });
   } catch (err) {
 
   }
+}));
+
+router.get('/me/isFollowing/:username(\\D+\\w+)', requireAuth, asyncHandler(async (req, res) => {
+  const {
+    params: { username },
+    user: { id: userId }
+  } = req;
+  const follower = await db.User.findByPk(userId);
+  const following = await db.User.findOne({ where: { username } });
+  const isFollowing = await follower.isFollowing(following);
+  return res.json({ isFollowing });
+}));
+
+router.get('/:username(\\D+\\w+)', asyncHandler(async (req, res) => {
+  const { params: { username } } = req;
+  const user = await db.User.findOne({ where: { username } });
+  if (!user) return res.json({ user: null });
+  return res.json({ user: user.toSafeObject() });
 }));
 
 module.exports = router;

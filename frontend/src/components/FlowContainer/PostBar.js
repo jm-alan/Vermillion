@@ -6,9 +6,10 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { TouchPost } from '../../store/post';
+import csrfetch from '../../store/csrf';
 
 export default function PostBar ({ username, backendId, isHearted, createdAt, updatedAt }) {
   createdAt = new Date(createdAt);
@@ -16,6 +17,7 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
   const dispatch = useDispatch();
   const [hearted, setHearted] = useState(isHearted);
   const [hoverMenu, popHoverMenu] = useState(false);
+  const [isFollowing, setFollowing] = useState(false);
   const [mooring, setMooring] = useState(null);
 
   let hangTimer;
@@ -24,7 +26,7 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
     hangTimer = setTimeout(() => {
       setMooring(target);
       popHoverMenu(true);
-    }, 750);
+    }, 1000);
   };
 
   const menuClose = () => {
@@ -33,7 +35,7 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
   };
 
   const lowerMouseOut = () => {
-    if (!hoverMenu && hangTimer) clearTimeout(hangTimer);
+    !hoverMenu && hangTimer && clearTimeout(hangTimer);
   };
 
   const heart = () => {
@@ -51,6 +53,25 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
         }
       });
   };
+
+  const follow = () => {
+    csrfetch(`/api/users/${username}/followers`, {
+      method: 'POST'
+    })
+      .then(resp => {
+        setFollowing(!!resp.data.result.match('follow'));
+        menuClose();
+      });
+  };
+
+  useEffect(() => {
+    (async () => {
+      return await csrfetch(`/api/users/me/isFollowing/${username}`);
+    })()
+      .then(resp => setFollowing(!!resp.data?.isFollowing));
+  }, [username]);
+
+  useEffect(() => {}, [isFollowing]);
 
   return (
     <div
@@ -72,10 +93,10 @@ export default function PostBar ({ username, backendId, isHearted, createdAt, up
           open={hoverMenu}
         >
           <MenuItem
-            onClick={menuClose}
+            onClick={follow}
             onMouseLeave={menuClose}
           >
-            Follow
+            {`${isFollowing ? 'Unfollow' : 'Follow'}`}
           </MenuItem>
         </Menu>
         {' | '}

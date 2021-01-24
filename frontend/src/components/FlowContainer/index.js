@@ -8,8 +8,7 @@ import { dirtySetFlowContainer } from '../../utils/dirtySetWidth';
 import { EnumerateFlowContainer } from '../../store/post';
 
 export default function FlowContainer () {
-  const postList = useSelector(state => state.post ? state.post.list : null);
-  const updateFlow = useSelector(state => state.post ? state.post.updateFlow : null);
+  const postList = useSelector(state => state.post?.list);
   const dispatch = useDispatch();
   const location = useLocation();
   const whereAmI = location.pathname;
@@ -24,7 +23,7 @@ export default function FlowContainer () {
     updatePageErrors([]);
     dispatch(EnumerateFlowContainer(whereAmI.toString()))
       .catch(err => updatePageErrors(() => [err]));
-  }, [dispatch, whereAmI, updateFlow]);
+  }, [dispatch, whereAmI]);
 
   return (
     <div className='flowContainer'>
