@@ -1,8 +1,6 @@
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { useState } from 'react';
 
-import * as buttonActions from '../../utils/markMods';
+import ButtonGroup from './ButtonGroup';
 
 const buttonsBasic = [
   { type: 'bold', title: 'Bold - Highlight text (optional), then click or CTRL+B', icon: <i className='fas fa-bold' /> },
@@ -28,6 +26,10 @@ const buttonsAdv2 = [
   { type: 'H6', title: 'Heading 6', icon: 'H6' }
 ];
 
+const table = [
+  { type: 'table', title: 'Table - coming soon!', icon: <i className='fas fa-table' /> }
+];
+
 export default function ButtonBar ({ updateRTEtext }) {
   const [expanded, toggleExpanded] = useState(false);
   const toggle = () => toggleExpanded(expanded => !expanded);
@@ -35,85 +37,16 @@ export default function ButtonBar ({ updateRTEtext }) {
   return (
     <div className='buttonContainer'>
       <div className={`buttonContainer ${expanded ? 'expanded' : 'unexpanded'}`}>
-        <ButtonGroup
-          className='editorBar'
-          variant='contained'
-        >
-          {buttonsBasic.map(button => (
-            <Button
-              color='primary'
-              key={button.type}
-              title={button.title}
-              className='editorButton'
-              onClick={() => {
-                buttonActions[button.type](updateRTEtext);
-              }}
-            >
-              {button.icon}
-            </Button>
-          ))}
-        </ButtonGroup>
-        <ButtonGroup
-          className='editorBar'
-          variant='contained'
-        >
-          {buttonsAdv1.map(button => (
-            <Button
-              color='primary'
-              key={button.type}
-              title={button.title}
-              className='editorButton'
-              onClick={() => {
-                buttonActions[button.type](updateRTEtext);
-              }}
-            >
-              {button.icon}
-            </Button>
-          ))}
-        </ButtonGroup>
-        <ButtonGroup
-          className='editorBar'
-          variant='contained'
-        >
-          {buttonsAdv2.map(button => (
-            <Button
-              color='primary'
-              key={button.type}
-              title={button.title}
-              className='editorButton'
-              onClick={() => {
-                buttonActions[button.type](updateRTEtext);
-              }}
-            >
-              {button.icon}
-            </Button>
-          ))}
-        </ButtonGroup>
-        <ButtonGroup
-          className='editorBar'
-          variant='contained'
-        >
-          <Button
-            color='primary'
-            className='editorButton'
-            title='Table - coming soon!'
-          >
-            <i className='fas fa-table' />
-          </Button>
-        </ButtonGroup>
+        <ButtonGroup buttons={buttonsBasic} updateRTEtext={updateRTEtext} />
+        <ButtonGroup buttons={buttonsAdv1} updateRTEtext={updateRTEtext} />
+        <ButtonGroup buttons={buttonsAdv2} updateRTEtext={updateRTEtext} />
+        <ButtonGroup buttons={table} updateRTEtext={updateRTEtext} />
       </div>
-      <Button
-        variant='contained'
-        color='secondary'
-        id='editExpand'
-        onClick={toggle}
-      >
-        {
-          expanded
-            ? <i className='fas fa-caret-up' />
-            : <i className='fas fa-caret-down' />
-        }
-      </Button>
+      <button id='editExpand' onClick={toggle}>
+        {expanded
+          ? <i className='fas fa-caret-up' />
+          : <i className='fas fa-caret-down' />}
+      </button>
     </div>
   );
 }
