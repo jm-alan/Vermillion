@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
 
 import BlogHeader from './BlogHeader';
 import FlowContainer from '../FlowContainer';
@@ -17,11 +16,17 @@ export default function Page () {
   const [matchesAndExists, setMatchesAndExists] = useState(false);
 
   useEffect(() => {
-    if (page.match(/^[a-zA-Z]+[a-zA-Z0-9-_]+$/)) {
+    if (
+      page.match(/^[a-zA-Z]+[a-zA-Z0-9-_]+$/)
+    ) {
       dispatch(CheckIfExists(page))
-        .then(user => user ? setMatchesAndExists(true) : {});
+        .then(user => user
+          ? setMatchesAndExists(true)
+          : {}
+        );
     }
   }, [page, dispatch]);
+
   return (
     (page.match(/^\d+$/))
       ? (
@@ -29,10 +34,10 @@ export default function Page () {
         )
       : matchesAndExists
         ? (
-          <Container>
+          <div>
             <BlogHeader page={page} />
             <FlowContainer />
-          </Container>
+          </div>
           )
         : <NotFound />
   );
